@@ -34,6 +34,8 @@ all of them.
 would be added accordingly.
 
 #### Visual Sketch
+Not very well done, needs a lot of revision.
+![board1](doc/Mockup.png)
 
 #### External libraries
 - Picasso; quickly loading pictures
