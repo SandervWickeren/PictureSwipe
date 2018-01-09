@@ -9,20 +9,20 @@ once the user is back online. The database structure is as follows:
 The first table for the sqlite database. Name and date are saved for future reference. (Maybe want to implement that photo's are 
 showing up again after a year or something like that).
 
-*Progress*
-_Filename_
-_Date_
+**Progress**
+- _Filename_
+- _Date_
 
 The second table for the sqlite database, it's used to keep track of the files it has to process to firebase when there is no internet
 connection.
 
-*Favorites*
-_Filename_
+**Favorites**
+- _Filename_
 
 The first table for the Firebase, it's used to save the favorite (important) pictures from the users into the cloud.
 
-*UID*
-_Pictures_
+**UID**
+- _Pictures_
 
 #### API's and Frameworks:
 - Picasso
