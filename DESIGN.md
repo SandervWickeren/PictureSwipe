@@ -19,6 +19,11 @@ connection.
 **Favorites**
 - _Filename_
 
+Third table is the bin.
+
+**Bin**
+- _Filename_
+
 The first table for the Firebase, it's used to save the favorite (important) pictures from the users into the cloud.
 
 **UID**
@@ -29,7 +34,41 @@ The first table for the Firebase, it's used to save the favorite (important) pic
 - ListAdapters
 - Connection to sqlite database
 - Connection to firebase 
-- 
+
+_StartFragment_
+- Handles buttons
+- Loads where you previous where from savedinstance.
+
+_SwipeFragment_
+- Functions that loads the pictures
+- Function that sends the filename to the right table, even to firebase if connected to internet.
+- Function that handles swipe events.
+
+_FavoritesFragment_
+- Function that loads pictures from database.
+- Function that handles removal from favorites.
+- ListAdapater
+- Custom listview
+- Function that checks if user is online
+
+_BinFragment_
+- Function that deletes all pictures
+- Listadapter
+- Custom listview
+
+_Popupfragment_
+- Checks if user is sure doing a certain action.
+
+_PictureFragment_
+- Function that show picture fullscreen
+
+_LoginFragment_
+- Function that handles login process
+- Function that handles button clicks
+
+_RegisterFragment_
+- Function that handels register process
+- Function that handles button clicks
 
 #### API's and Frameworks:
 - Picasso
