@@ -24,6 +24,13 @@ The first table for the Firebase, it's used to save the favorite (important) pic
 **UID**
 - _Pictures_
 
+#### Functions and necessary classes
+- DeleteAll Pictures
+- ListAdapters
+- Connection to sqlite database
+- Connection to firebase 
+- 
+
 #### API's and Frameworks:
 - Picasso
 - Firebase
