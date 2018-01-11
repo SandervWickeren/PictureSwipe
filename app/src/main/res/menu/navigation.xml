@@ -4,25 +4,21 @@
     <item
         android:id="@+id/navigation_account"
         android:icon="@drawable/ic_account_circle_black_24dp"
-        android:checked="false"
         android:title="@string/bnv_acc" />
 
     <item
         android:id="@+id/navigation_swipe"
         android:icon="@drawable/ic_view_carousel_black_24dp"
-        android:checked="true"
         android:title="@string/bnv_swi" />
 
     <item
         android:id="@+id/navigation_favorites"
         android:icon="@drawable/ic_grade_black_24dp"
-        android:checked="false"
         android:title="@string/bnv_fav" />
 
     <item
         android:id="@+id/navigation_bin"
         android:icon="@drawable/ic_delete_black_24dp"
-        android:checked="false"
         android:title="@string/bnv_bin" />
 
 </menu>

@@ -4,4 +4,7 @@
     <string name="bnv_swi">Swipe</string>
     <string name="bnv_fav">Favorites</string>
     <string name="bnv_bin">Bin</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
