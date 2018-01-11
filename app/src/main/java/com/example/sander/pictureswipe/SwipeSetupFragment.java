@@ -4,15 +4,19 @@ package com.example.sander.pictureswipe;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
 
 import java.io.File;
 
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass. Used to setup the start
@@ -21,12 +25,21 @@ import java.io.File;
 public class SwipeSetupFragment extends Fragment implements View.OnClickListener {
 
     public static final int GALLERY_REQUEST = 10;
+    TextView path;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_swipe_setup, container, false);
+
+        Button select = view.findViewById(R.id.select);
+        select.setOnClickListener(this);
+        Button start = view.findViewById(R.id.start);
+        start.setOnClickListener(this);
+        TextView path = view.findViewById(R.id.path);
+
+
         return view;
     }
 
@@ -34,6 +47,7 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.select:
+                Toast.makeText(getActivity(), "Yes", Toast.LENGTH_SHORT).show();
                 selectGalleryImage(view);
                 break;
             case R.id.start:
@@ -42,7 +56,8 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
     }
 
     /**
-     * This method 'll be invoked when the user clicks the 'select' button
+     * This method 'll be invoked when the user clicks the 'select' button. The selected
+     * picture 'll be processed in the MainActivity at 'onActivityResult'.
      * @param view
      */
     public void selectGalleryImage(View view) {
@@ -58,9 +73,9 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
         // Set the correct image filetype.
         galleryIntent.setDataAndType(data, "image/*");
 
+        // Use request code to trace back the result
         startActivityForResult(galleryIntent, GALLERY_REQUEST);
 
 
     }
-
 }
