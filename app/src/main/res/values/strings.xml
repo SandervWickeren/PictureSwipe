@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PictureSwipe</string>
+    <string name="bnv_acc">Account</string>
+    <string name="bnv_swi">Swipe</string>
+    <string name="bnv_fav">Favorites</string>
+    <string name="bnv_bin">Bin</string>
 </resources>
