@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.List;
 
 
 /**
@@ -50,6 +52,7 @@ public class SwipeFragment extends Fragment {
             String path = getRealPathFromUri(getContext(), pictureUri);
             Log.d("testsss", path);
             Toast.makeText(getActivity(), path, Toast.LENGTH_SHORT).show();
+            getImages(path);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,6 +82,40 @@ public class SwipeFragment extends Fragment {
                 cursor.close();
             }
         }
+    }
+
+    public void getImages(String path) {
+        String[] splitted = path.split("/");
+
+        String s = "";
+        for (int i = 0; i < splitted.length - 1; i++) {
+            s += splitted[i] + "/";
+        }
+        System.out.println(s);
+
+
+       /* // Test
+        File testfile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString());
+        File[] listtestfiles = testfile.listFiles();
+        for (File pf: listtestfiles) {
+            System.out.println(pf.toString());
+        }*/
+
+        File f = new File(s);
+        if (!f.exists() || !f.isDirectory()){
+            System.out.println("No such directory");
+        } else if (!f.canRead()) {
+            System.out.println("Can't read");
+        }
+
+        File[] paths = f.listFiles();
+
+
+        for (File p:paths){
+            System.out.println(p.toString());
+        }
+
+
     }
 
 
