@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass. Used to
+ * show all favorites of the user in a ListView.
  */
 public class FavoritesFragment extends Fragment {
 

@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass. Used to register
+ * at FireBase so the user can save his or her favorites.
  */
 public class RegisterFragment extends Fragment {
 

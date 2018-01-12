@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass. Used to login
+ * at FireBase, so favorites can be saved online.
  */
 public class LoginFragment extends Fragment {
 

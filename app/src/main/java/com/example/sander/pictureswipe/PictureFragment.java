@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass. Used to show
+ * a picture fullscreen.
  */
 public class PictureFragment extends Fragment {
 

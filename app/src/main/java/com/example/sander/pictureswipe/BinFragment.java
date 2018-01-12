@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass. Used to
+ * show all pictures placed in the bin in a ListView.
  */
 public class BinFragment extends Fragment {
 
