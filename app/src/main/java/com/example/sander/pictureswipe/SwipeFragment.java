@@ -31,10 +31,16 @@ public class SwipeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ImageView imageView = getView().findViewById(R.id.content);
-        Bundle bundle = this.getArguments();
-        Uri pictureUri = bundle.getParcelable("uri");
 
-        Picasso.with(getContext()).load(pictureUri).into(imageView);
+        try {
+            Bundle bundle = this.getArguments();
+            Uri pictureUri = bundle.getParcelable("uri");
+
+            Picasso.with(getContext()).load(pictureUri).into(imageView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 }

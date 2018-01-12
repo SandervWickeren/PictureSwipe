@@ -2,13 +2,17 @@ package com.example.sander.pictureswipe;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Toast;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,11 +21,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Set onClickListener for bottomNavigation.
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_swipe);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new navigationClicks());
 
         SwipeSetupFragment fragment = new SwipeSetupFragment();
         replaceFragment(fragment);
+        updateNavigation(fragment);
+
+        // Set backstack listener
+        getSupportFragmentManager().addOnBackStackChangedListener(new backstackListener());
 
 
     }
@@ -45,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
             ft.addToBackStack(backStateName);
             ft.commit();
         }
+
+        updateNavigation(fragment);
     }
 
 
@@ -57,32 +69,109 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
-
-        /*if (resultCode == RESULT_OK) {
-            Uri pictureUri = data.getData();
-
-            Toast.makeText(MainActivity.this, pictureUri.getPath(), Toast.LENGTH_SHORT).show();
-
-            // Make new bundle with uri and inflate new fragment
-            SwipeFragment fragment = new SwipeFragment();
-            Bundle bundle = new Bundle();
-            //bundle.putString("uri", pictureUri.toString());
-            bundle.putParcelable("imageUri", pictureUri);
-
-            fragment.setArguments(bundle);
-            replaceFragment(fragment);
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment_container, fragment, SwipeFragment.class.getName());
-            // ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
-            ft.addToBackStack(SwipeFragment.class.getName());
-            ft.commit();
-
-
-        } else {
-            // Error message
-        }*/
     }
+
+    /**
+     * Class that handles the BottomNavigation clicks.
+     */
+    private class navigationClicks implements BottomNavigationView.OnNavigationItemSelectedListener {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            // Get id
+            int id = item.getItemId();
+
+            // Get current selected id
+            BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+            int selected_id = bottomNavigationView.getSelectedItemId();
+
+            // Check if already selected
+            if (!(Objects.equals(id, selected_id))) {
+
+                // Launch correct fragment
+                if (id == R.id.navigation_favorites) {
+                    FavoritesFragment fragment = new FavoritesFragment();
+                    replaceFragment(fragment);
+
+                } else if (id == R.id.navigation_swipe) {
+                    SwipeSetupFragment fragment = new SwipeSetupFragment();
+                    replaceFragment(fragment);
+
+                } else if (id == R.id.navigation_account) {
+                    /*if (mAuth.getCurrentUser() == null) {
+                        Loginfragment fragment = new Loginfragment();
+                        replaceFragment(fragment);
+                    } else {
+                        Profilefragment fragment = new Profilefragment();
+                        replaceFragment(fragment);
+                    }*/
+                    LoginFragment fragment = new LoginFragment();
+                    replaceFragment(fragment);
+                } else if (id == R.id.navigation_bin) {
+                    BinFragment fragment = new BinFragment();
+                    replaceFragment(fragment);
+                }
+            }
+            // Visually show the selected item;
+            return true;
+        }
+    }
+
+    /**
+     * Functions that makes sure that the current inflated fragment
+     * represents the correct selection at the BottomNavigationView.
+     * @param fragment
+     */
+    private void updateNavigation (Fragment fragment) {
+        // Get fragment class name
+        String name = fragment.getClass().getName();
+
+        // Get view
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        // Remove Listener to prevent infinite looping.
+        bottomNavigationView.setOnNavigationItemSelectedListener(null);
+
+        // Change selected item based on current fragment
+        if (Objects.equals(name, SwipeSetupFragment.class.getName()))  {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_swipe);
+        } else if (Objects.equals(name, BinFragment.class.getName())) {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_bin);
+        } else if (Objects.equals(name, FavoritesFragment.class.getName())) {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_favorites);
+        } else if (Objects.equals(name, SwipeFragment.class.getName())) {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_swipe);
+
+            // All other fragments are from the profile page
+        } else {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_account);
+        }
+
+        // Set the listener back
+        bottomNavigationView.setOnNavigationItemSelectedListener(new navigationClicks());
+    }
+
+    /**
+     * Class that handles navigation to previous fragments. It updates the UI and closes
+     * the application when there is no fragment left.
+     */
+    private class backstackListener implements FragmentManager.OnBackStackChangedListener {
+        @Override
+        public void onBackStackChanged() {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if (fragment != null) {
+                updateNavigation(fragment);
+            }
+
+            // If backstack is empty it should close the app
+            int backstackCount = getSupportFragmentManager().getBackStackEntryCount();
+            if (backstackCount == 0) {
+                MainActivity.this.finish();
+            }
+
+        }
+    }
+
+
 }

@@ -86,6 +86,8 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
             fragmnent.setArguments(bundle);
             ((MainActivity)getActivity()).replaceFragment(fragmnent);
 
+        } else {
+            // TODO show error
         }
 
     }
