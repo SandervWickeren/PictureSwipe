@@ -25,7 +25,6 @@ import static android.app.Activity.RESULT_OK;
 public class SwipeSetupFragment extends Fragment implements View.OnClickListener {
 
     public static final int GALLERY_REQUEST = 10;
-    TextView path;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,10 +34,6 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
 
         Button select = view.findViewById(R.id.select);
         select.setOnClickListener(this);
-        Button start = view.findViewById(R.id.start);
-        start.setOnClickListener(this);
-        TextView path = view.findViewById(R.id.path);
-
 
         return view;
     }
@@ -49,8 +44,6 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
             case R.id.select:
                 Toast.makeText(getActivity(), "Yes", Toast.LENGTH_SHORT).show();
                 selectGalleryImage(view);
-                break;
-            case R.id.start:
                 break;
         }
     }
@@ -76,6 +69,24 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
         // Use request code to trace back the result
         startActivityForResult(galleryIntent, GALLERY_REQUEST);
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == RESULT_OK) {
+            Uri pictureUri = data.getData();
+
+            Toast.makeText(getActivity(), pictureUri.getPath(), Toast.LENGTH_SHORT).show();
+
+            // Load new fragment
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("uri", pictureUri);
+            SwipeFragment fragmnent = new SwipeFragment();
+            fragmnent.setArguments(bundle);
+            ((MainActivity)getActivity()).replaceFragment(fragmnent);
+
+        }
 
     }
 }

@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Used to catch data from the gallery. The process is launched
      * from the SwipeSetupFragment.
@@ -56,7 +57,10 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        /*if (resultCode == RESULT_OK) {
             Uri pictureUri = data.getData();
 
             Toast.makeText(MainActivity.this, pictureUri.getPath(), Toast.LENGTH_SHORT).show();
@@ -64,9 +68,21 @@ public class MainActivity extends AppCompatActivity {
             // Make new bundle with uri and inflate new fragment
             SwipeFragment fragment = new SwipeFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("uri", pictureUri.getPath());
+            //bundle.putString("uri", pictureUri.toString());
+            bundle.putParcelable("imageUri", pictureUri);
+
             fragment.setArguments(bundle);
             replaceFragment(fragment);
-        }
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_container, fragment, SwipeFragment.class.getName());
+            // ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
+            ft.addToBackStack(SwipeFragment.class.getName());
+            ft.commit();
+
+
+        } else {
+            // Error message
+        }*/
     }
 }
