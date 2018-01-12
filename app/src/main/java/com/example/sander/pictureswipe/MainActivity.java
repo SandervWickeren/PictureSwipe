@@ -98,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
                     SwipeSetupFragment fragment = new SwipeSetupFragment();
                     replaceFragment(fragment);
 
+                    // Check if Swipefragment is active,
+                    // otherwise launch SwipeSetup.
+
                 } else if (id == R.id.navigation_account) {
                     /*if (mAuth.getCurrentUser() == null) {
                         Loginfragment fragment = new Loginfragment();

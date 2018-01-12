@@ -82,9 +82,9 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
             // Load new fragment
             Bundle bundle = new Bundle();
             bundle.putParcelable("uri", pictureUri);
-            SwipeFragment fragmnent = new SwipeFragment();
-            fragmnent.setArguments(bundle);
-            ((MainActivity)getActivity()).replaceFragment(fragmnent);
+            SwipeFragment fragment = new SwipeFragment();
+            fragment.setArguments(bundle);
+            ((MainActivity)getActivity()).replaceFragment(fragment);
 
         } else {
             // TODO show error
