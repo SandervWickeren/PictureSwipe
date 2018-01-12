@@ -1,6 +1,8 @@
 # PictureSwipe
 Easily swipe trough your pictures
 
+[![BCH compliance](https://bettercodehub.com/edge/badge/SandervWickeren/PictureSwipe?branch=master)](https://bettercodehub.com/)
+
 ## Problem
 A common problem is that we have thousands of photo's on our mobile phone. It's
 relatively hard to select a chunk of pictures and remove them. Deleting multiple 
