@@ -45,7 +45,7 @@ public class SwipeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_swipe, container, false);
 
         mSwipeStack = view.findViewById(R.id.swipeStack);
-        ImageView imageView = view.findViewById(R.id.content);
+        //ImageView imageView = view.findViewById(R.id.content);
 
         try {
             Bundle bundle = this.getArguments();
@@ -134,6 +134,10 @@ public class SwipeFragment extends Fragment {
 
             TextView textViewCard = (TextView) convertView.findViewById(R.id.textViewCard);
             textViewCard.setText(mData.get(position));
+
+            ImageView imageView = convertView.findViewById(R.id.cardImage);
+            File file = new File(mData.get(position));
+            Picasso.with(getContext()).load(file).resize(800, 800).centerInside().into(imageView);
 
             return convertView;
         }
