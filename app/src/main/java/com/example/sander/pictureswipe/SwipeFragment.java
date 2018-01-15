@@ -36,6 +36,8 @@ public class SwipeFragment extends Fragment {
     private SwipeStack mSwipeStack;
     private SwipeStackAdapter swipeStackAdapter;
     private SwipeStackListener swipeStackListener;
+    private SwipeProgressListener swipeProgressListener;
+    TextView positionss, progressss;
 
 
     @Override
@@ -45,6 +47,8 @@ public class SwipeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_swipe, container, false);
 
         mSwipeStack = view.findViewById(R.id.swipeStack);
+        positionss = view.findViewById(R.id.positions);
+        progressss = view.findViewById(R.id.progressions);
         //ImageView imageView = view.findViewById(R.id.content);
 
         try {
@@ -66,8 +70,10 @@ public class SwipeFragment extends Fragment {
 
         swipeStackAdapter = new SwipeStackAdapter(images);
         swipeStackListener = new SwipeStackListener();
+        swipeProgressListener = new SwipeProgressListener();
         mSwipeStack.setAdapter(swipeStackAdapter);
         mSwipeStack.setListener(swipeStackListener);
+        mSwipeStack.setSwipeProgressListener(swipeProgressListener);
 
 
 
@@ -137,9 +143,33 @@ public class SwipeFragment extends Fragment {
 
             ImageView imageView = convertView.findViewById(R.id.cardImage);
             File file = new File(mData.get(position));
-            Picasso.with(getContext()).load(file).resize(800, 800).centerInside().into(imageView);
+            try {
+                Picasso.with(getContext()).load(file).error(R.drawable.higlight_color).resize(800, 800).centerInside().into(imageView);
+            } catch (Exception e) {
+                System.out.println("Couldn't load: " + mData.get(position));
+            }
+
 
             return convertView;
+        }
+    }
+
+    public class SwipeProgressListener implements SwipeStack.SwipeProgressListener {
+
+        @Override
+        public void onSwipeStart(int position) {
+
+        }
+
+        @Override
+        public void onSwipeProgress(int position, float progress) {
+            positionss.setText(String.valueOf(position));
+            progressss.setText(String.valueOf(progress));
+        }
+
+        @Override
+        public void onSwipeEnd(int position) {
+
         }
     }
 

@@ -68,12 +68,18 @@ public class LoadImages {
             System.out.println("Can't read");
         }
 
+        // Supported file extensions.
+        String[] allowedExtensions = new String[] {"jpg", "jpeg", "png"};
         File[] files = dir.listFiles();
 
-        // Convert to list of string
+        // Convert to list of string containing only allowed files.
         List<String> imagePaths = new ArrayList<>();
         for (File img:files){
-            imagePaths.add(img.toString());
+            for (String extension : allowedExtensions) {
+                if (img.getName().toLowerCase().endsWith(extension)) {
+                    imagePaths.add(img.toString());
+                }
+            }
         }
 
         return imagePaths;
