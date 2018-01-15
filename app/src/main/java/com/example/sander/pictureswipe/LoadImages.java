@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that handles the loading and processing of images.
@@ -13,7 +15,7 @@ import java.io.File;
 
 public class LoadImages {
 
-    public File[] getList(Context context, Uri uri) {
+    public List<String> getList(Context context, Uri uri) {
         String initial_path = getRealPathFromUri(context, uri);
         return genList(initial_path);
     }
@@ -46,7 +48,7 @@ public class LoadImages {
      * @param path Path from the selected images.
      * @return List of files from the parent folder.
      */
-    public File[] genList(String path) {
+    public List<String> genList(String path) {
 
         // Get base folder from selected image.
         String[] splitPath = path.split("/");
@@ -66,11 +68,13 @@ public class LoadImages {
             System.out.println("Can't read");
         }
 
-        File[] imagePaths = dir.listFiles();
+        File[] files = dir.listFiles();
 
-        /*for (File img:imagePaths){
-            System.out.println(img.toString());
-        }*/
+        // Convert to list of string
+        List<String> imagePaths = new ArrayList<>();
+        for (File img:files){
+            imagePaths.add(img.toString());
+        }
 
         return imagePaths;
     }
