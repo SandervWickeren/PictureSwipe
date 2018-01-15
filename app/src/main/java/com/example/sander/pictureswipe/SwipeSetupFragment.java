@@ -71,6 +71,13 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
 
     }
 
+    /**
+     * This method handles the response from the gallery activity. It gets called
+     * from the MainActivity and starts the SwipeFragment.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 

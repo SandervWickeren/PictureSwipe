@@ -1,0 +1,77 @@
+package com.example.sander.pictureswipe;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
+
+import java.io.File;
+
+/**
+ * Class that handles the loading and processing of images.
+ */
+
+public class LoadImages {
+
+    public File[] getList(Context context, Uri uri) {
+        String initial_path = getRealPathFromUri(context, uri);
+        return genList(initial_path);
+    }
+
+    /**
+     * Used to convert URI to a real path.
+     * Source: https://stackoverflow.com/a/20059657
+     * @param context
+     * @param contentUri
+     * @return
+     */
+    public static String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    /**
+     * Uses a path from an images to index all files
+     * from its parent folder.
+     * @param path Path from the selected images.
+     * @return List of files from the parent folder.
+     */
+    public File[] genList(String path) {
+
+        // Get base folder from selected image.
+        String[] splitPath = path.split("/");
+        String dirPath = "";
+        for (int i = 0; i < splitPath.length - 1; i++) {
+            dirPath += splitPath[i] + "/";
+        }
+        System.out.println(dirPath);
+
+        // Use base folder to list all files from directory.
+        File dir = new File(dirPath);
+
+        // Check for possible failures.
+        if (!dir.exists() || !dir.isDirectory()){
+            System.out.println("No such directory");
+        } else if (!dir.canRead()) {
+            System.out.println("Can't read");
+        }
+
+        File[] imagePaths = dir.listFiles();
+
+        /*for (File img:imagePaths){
+            System.out.println(img.toString());
+        }*/
+
+        return imagePaths;
+    }
+}

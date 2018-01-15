@@ -47,12 +47,9 @@ public class SwipeFragment extends Fragment {
 
             Picasso.with(getContext()).load(pictureUri).into(imageView);
 
-            // Get path
+            LoadImages loadImages = new LoadImages();
+            File[] images = loadImages.getList(getContext(), pictureUri);
 
-            String path = getRealPathFromUri(getContext(), pictureUri);
-            Log.d("testsss", path);
-            Toast.makeText(getActivity(), path, Toast.LENGTH_SHORT).show();
-            getImages(path);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,61 +59,9 @@ public class SwipeFragment extends Fragment {
     }
 
 
-    /**
-     * Used to convert URI to a real path.
-     * Source: https://stackoverflow.com/a/20059657
-     * @param context
-     * @param contentUri
-     * @return
-     */
-    public static String getRealPathFromUri(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
-    public void getImages(String path) {
-        String[] splitted = path.split("/");
-
-        String s = "";
-        for (int i = 0; i < splitted.length - 1; i++) {
-            s += splitted[i] + "/";
-        }
-        System.out.println(s);
 
 
-       /* // Test
-        File testfile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString());
-        File[] listtestfiles = testfile.listFiles();
-        for (File pf: listtestfiles) {
-            System.out.println(pf.toString());
-        }*/
 
-        File f = new File(s);
-        if (!f.exists() || !f.isDirectory()){
-            System.out.println("No such directory");
-        } else if (!f.canRead()) {
-            System.out.println("Can't read");
-        }
-
-        File[] paths = f.listFiles();
-
-
-        for (File p:paths){
-            System.out.println(p.toString());
-        }
-
-
-    }
 
 
 
