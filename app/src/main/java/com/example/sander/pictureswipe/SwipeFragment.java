@@ -28,6 +28,8 @@ import java.util.List;
 import link.fls.swipestack.SwipeStack;
 
 
+
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -101,29 +103,27 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
     public class SwipeStackListener implements SwipeStack.SwipeStackListener{
 
         @Override
         public void onViewSwipedToLeft(int position) {
             String swipedElement = swipeStackAdapter.getItem(position);
             imagesPointer += 1;
-            Toast.makeText(getActivity(), "left",
-                    Toast.LENGTH_SHORT).show();
+            System.out.println("Left");
         }
 
         @Override
         public void onViewSwipedToRight(int position) {
             String swipedElement = swipeStackAdapter.getItem(position);
             imagesPointer += 1;
-            Toast.makeText(getActivity(), "right",
-                    Toast.LENGTH_SHORT).show();
+            System.out.println("Right");
         }
 
         @Override
         public void onStackEmpty() {
             Toast.makeText(getActivity(), "Empty stack", Toast.LENGTH_SHORT).show();
         }
+
     }
 
 
@@ -161,6 +161,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             positionss.setText(String.valueOf(imagesPointer));
 
             ImageView imageView = convertView.findViewById(R.id.cardImage);
+
             File file = new File(mData.get(position));
             try {
                 Picasso.with(getContext()).load(file).error(R.drawable.higlight_color).resize(800, 800).centerInside().into(imageView);
@@ -169,6 +170,8 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             }
             return convertView;
         }
+
+
     }
 
     public class SwipeProgressListener implements SwipeStack.SwipeProgressListener {
