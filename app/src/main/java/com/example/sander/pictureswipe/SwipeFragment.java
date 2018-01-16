@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +31,7 @@ import link.fls.swipestack.SwipeStack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SwipeFragment extends Fragment {
+public class SwipeFragment extends Fragment implements View.OnClickListener {
 
     private List<String> images;
     private Integer imagesPointer;
@@ -39,6 +40,7 @@ public class SwipeFragment extends Fragment {
     private SwipeStackListener swipeStackListener;
     private SwipeProgressListener swipeProgressListener;
     TextView positionss, progressss;
+    Button bin, fav, next;
 
 
     @Override
@@ -50,7 +52,12 @@ public class SwipeFragment extends Fragment {
         mSwipeStack = view.findViewById(R.id.swipeStack);
         positionss = view.findViewById(R.id.positions);
         progressss = view.findViewById(R.id.progressions);
-        //ImageView imageView = view.findViewById(R.id.content);
+        bin = view.findViewById(R.id.addBin);
+        fav = view.findViewById(R.id.addFavorite);
+        next = view.findViewById(R.id.next);
+        bin.setOnClickListener(this);
+        fav.setOnClickListener(this);
+        next.setOnClickListener(this);
 
         try {
             Bundle bundle = this.getArguments();
@@ -62,23 +69,16 @@ public class SwipeFragment extends Fragment {
             images = loadImages.getList(getContext(), pictureUri);
             System.out.println(images.size());
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
         swipeStackAdapter = new SwipeStackAdapter(images);
         swipeStackListener = new SwipeStackListener();
         swipeProgressListener = new SwipeProgressListener();
+        imagesPointer = 0;
         mSwipeStack.setAdapter(swipeStackAdapter);
         mSwipeStack.setListener(swipeStackListener);
         mSwipeStack.setSwipeProgressListener(swipeProgressListener);
-
-
-
-
         return view;
     }
 
@@ -87,11 +87,27 @@ public class SwipeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.addBin:
+                mSwipeStack.swipeTopViewToLeft();
+                break;
+            case R.id.addFavorite:
+                break;
+            case R.id.next:
+                mSwipeStack.swipeTopViewToRight();
+                break;
+        }
+    }
+
+
     public class SwipeStackListener implements SwipeStack.SwipeStackListener{
 
         @Override
         public void onViewSwipedToLeft(int position) {
             String swipedElement = swipeStackAdapter.getItem(position);
+            imagesPointer += 1;
             Toast.makeText(getActivity(), "left",
                     Toast.LENGTH_SHORT).show();
         }
@@ -99,6 +115,7 @@ public class SwipeFragment extends Fragment {
         @Override
         public void onViewSwipedToRight(int position) {
             String swipedElement = swipeStackAdapter.getItem(position);
+            imagesPointer += 1;
             Toast.makeText(getActivity(), "right",
                     Toast.LENGTH_SHORT).show();
         }
@@ -141,6 +158,7 @@ public class SwipeFragment extends Fragment {
 
             TextView textViewCard = (TextView) convertView.findViewById(R.id.textViewCard);
             textViewCard.setText(mData.get(position));
+            positionss.setText(String.valueOf(imagesPointer));
 
             ImageView imageView = convertView.findViewById(R.id.cardImage);
             File file = new File(mData.get(position));
@@ -149,8 +167,6 @@ public class SwipeFragment extends Fragment {
             } catch (Exception e) {
                 System.out.println("Couldn't load: " + mData.get(position));
             }
-
-
             return convertView;
         }
     }
@@ -164,7 +180,7 @@ public class SwipeFragment extends Fragment {
 
         @Override
         public void onSwipeProgress(int position, float progress) {
-            positionss.setText(String.valueOf(position));
+            //positionss.setText(String.valueOf(position));
             progressss.setText(String.valueOf(progress));
         }
 
