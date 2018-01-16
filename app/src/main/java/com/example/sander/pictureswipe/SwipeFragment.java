@@ -33,6 +33,7 @@ import link.fls.swipestack.SwipeStack;
 public class SwipeFragment extends Fragment {
 
     private List<String> images;
+    private Integer imagesPointer;
     private SwipeStack mSwipeStack;
     private SwipeStackAdapter swipeStackAdapter;
     private SwipeStackListener swipeStackListener;
