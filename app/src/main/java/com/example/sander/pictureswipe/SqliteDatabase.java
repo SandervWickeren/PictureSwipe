@@ -63,9 +63,10 @@ public class SqliteDatabase extends SQLiteOpenHelper {
      */
     public long getIdFromName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id FROM pictures WHERE name=" + name, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM pictures WHERE name=" + name, null);
+        int id_index = cursor.getColumnIndex("id");
 
-        return cursor.getLong(0);
+        return cursor.getLong(id_index);
     }
 
     /**
