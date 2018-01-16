@@ -1,6 +1,8 @@
 package com.example.sander.pictureswipe;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -44,8 +46,13 @@ public class SqliteDatabase extends SQLiteOpenHelper {
      * @param name
      * @param album
      */
-    public void addPicture(String name, String album) {
+    public void insertPicture(String name, String album) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", name);
+        contentValues.put("album", album);
 
+        db.insert("pictures", null, contentValues);
     }
 
     /**
@@ -55,7 +62,10 @@ public class SqliteDatabase extends SQLiteOpenHelper {
      * pictures table.
      */
     public long getIdFromName(String name) {
-        return 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT id FROM pictures WHERE name=" + name, null);
+
+        return cursor.getLong(0);
     }
 
     /**
@@ -63,8 +73,12 @@ public class SqliteDatabase extends SQLiteOpenHelper {
      * @param table: Picture add location.
      * @param id: Picture ID from the pictures table
      */
-    public void addToList(String table, long id) {
+    public void insertToList(String table, long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("pictures_id", id);
 
+        db.insert(table, null, contentValues);
     }
 
     /**
@@ -73,7 +87,8 @@ public class SqliteDatabase extends SQLiteOpenHelper {
      * removed.
      */
     public void deletePicture(long id) {
-
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM todo WHERE id=" + String.valueOf(id) + ";");
     }
 
     /**
@@ -82,7 +97,7 @@ public class SqliteDatabase extends SQLiteOpenHelper {
      * @param id: ID from the pictures table.
      */
     public void deleteFromList(String table, long id) {
-
-
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + table +  " WHERE id=" + String.valueOf(id) + ";");
     }
 }
