@@ -255,9 +255,8 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
 
         System.out.println(name + "::" + album);
 
-        if (!(db.inPictures(name))) {
-            db.insertPicture(name, album);
-        }
+        db.insertPicture(name, album);
+
     }
 
     public void addToBin(String path) {

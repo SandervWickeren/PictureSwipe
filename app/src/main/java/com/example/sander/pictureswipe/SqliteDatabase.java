@@ -24,11 +24,14 @@ public class SqliteDatabase extends SQLiteOpenHelper {
         "name TEXT, album TEXT);");
 
         // Bin and favorites table
-        sqLiteDatabase.execSQL("CREATE TABLE bin (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        /*sqLiteDatabase.execSQL("CREATE TABLE bin (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
         "pictures_id INTEGER);");
 
         sqLiteDatabase.execSQL("CREATE TABLE favorites (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "pictures_id INTEGER);");
+*/
+        // Add some test values
+        sqLiteDatabase.execSQL("INSERT INTO pictures (name, album) VALUES ('Naam 1', 'Album 1');");
     }
 
     @Override
@@ -39,6 +42,17 @@ public class SqliteDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS bin");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS favorites");
         onCreate(sqLiteDatabase);
+    }
+
+    public Cursor selectAllPictures() {
+        System.out.println("selectAllPictures is being runned.");
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT id AS _id, * FROM pictures;", null);
+
+        System.out.println(cursor.getCount());
+
+        return cursor;
     }
 
     /**
@@ -52,7 +66,12 @@ public class SqliteDatabase extends SQLiteOpenHelper {
         contentValues.put("name", name);
         contentValues.put("album", album);
 
-        db.insert("pictures", null, contentValues);
+        long result = db.insert("pictures", null, contentValues);
+        if (result == -1) {
+            System.out.println("Couldn't add to db.");
+        } else {
+            System.out.println(result);
+        }
     }
 
     /**

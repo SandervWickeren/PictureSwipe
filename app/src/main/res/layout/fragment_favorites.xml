@@ -12,6 +12,13 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:textColor="@color/colorLight"
+        android:layout_weight="16"
         android:text="Favorites fragment" />
+
+    <ListView
+        android:id="@+id/favoriteList"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
