@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -43,7 +44,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     private SwipeStackAdapter swipeStackAdapter;
     private SwipeStackListener swipeStackListener;
     private SwipeProgressListener swipeProgressListener;
-    TextView positionss, progressss;
+    TextView positionss, progressss, color;
     Button bin, fav, next;
     RelativeLayout overlay;
 
@@ -57,6 +58,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         mSwipeStack = view.findViewById(R.id.swipeStack);
         positionss = view.findViewById(R.id.positions);
         progressss = view.findViewById(R.id.progressions);
+        color = view.findViewById(R.id.color);
         bin = view.findViewById(R.id.addBin);
         fav = view.findViewById(R.id.addFavorite);
         next = view.findViewById(R.id.next);
@@ -114,6 +116,9 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             String swipedElement = swipeStackAdapter.getItem(position);
             imagesPointer += 1;
             System.out.println("Left");
+
+            // Reset overlay color
+            overlay.setBackgroundColor(Color.parseColor("#00FFFFFF"));
         }
 
         @Override
@@ -121,6 +126,9 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             String swipedElement = swipeStackAdapter.getItem(position);
             imagesPointer += 1;
             System.out.println("Right");
+
+            // Reset overlay color
+            overlay.setBackgroundColor(Color.parseColor("#00FFFFFF"));
         }
 
         @Override
@@ -190,6 +198,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             //positionss.setText(String.valueOf(position));
             progressss.setText(String.valueOf(progress));
             overlay.setBackgroundColor(Color.parseColor(calculateColor(progress)));
+            color.setText(calculateColor(progress));
         }
 
         @Override
@@ -198,10 +207,41 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Used to calculate the correct alpha and color for the overlay when moving
+     * the picture to either left or right.
+     * @param progress A float that represents how far it's from the end of the screen
+     * @return A string containing the hex-color.
+     */
     public String calculateColor(float progress) {
-        float alpha = progress * 255;
+        String baseColorNext = "29ABA4";
+        String baseColorBin = "EB7260";
+        float alpha;
+        String baseColor;
+
+        // Only start changing overlay color when the progress is more then
+        // 0.05 to make it look smoother.
+        if (progress > 0.05) {
+            alpha = progress * 255;
+            baseColor = baseColorNext;
+
+        } else if (progress < -0.05) {
+            alpha = (-1 * progress) * 255;
+            baseColor = baseColorBin;
+
+        } else {
+            alpha = 0;
+            baseColor = "FFFFFF";
+
+        }
+
+        // Convert the alpha to hex.
         String hexAlpha= Integer.toString(Math.round(alpha), 16);
-        String baseColor = "F10909";
+
+        // If the size of the hex is to small an extra padding of one 0 is necessary.
+        if (hexAlpha.length() < 2) {
+            hexAlpha = "0" + hexAlpha;
+        }
 
         return "#" + hexAlpha + baseColor;
     }
