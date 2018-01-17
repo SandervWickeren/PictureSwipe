@@ -63,7 +63,7 @@ public class SqliteDatabase extends SQLiteOpenHelper {
      */
     public long getIdFromName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM pictures WHERE name=" + name, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM pictures WHERE name='" + name + "';", null);
         int id_index = cursor.getColumnIndex("id");
 
         return cursor.getLong(id_index);
@@ -80,6 +80,17 @@ public class SqliteDatabase extends SQLiteOpenHelper {
         contentValues.put("pictures_id", id);
 
         db.insert(table, null, contentValues);
+    }
+
+    public Boolean inPictures(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try {
+            Cursor cursor = db.rawQuery("SELECT * FROM pictures WHERE name='" + name + "';", null);
+            return Boolean.TRUE;
+        } catch (Exception e) {
+            return Boolean.FALSE;
+        }
     }
 
     /**

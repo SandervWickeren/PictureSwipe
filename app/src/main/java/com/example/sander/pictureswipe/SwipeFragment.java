@@ -113,8 +113,12 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onViewSwipedToLeft(int position) {
             String swipedElement = swipeStackAdapter.getItem(position);
-            imagesPointer += 1;
+            Log.d("INFO", "onViewSwipedToLeft:" + swipedElement);
             System.out.println("Left");
+
+            // Add image to bin.
+            addToPictures(swipedElement);
+            addToBin(swipedElement);
 
             // Reset overlay color
             overlay.setBackgroundColor(Color.parseColor("#00FFFFFF"));
@@ -123,8 +127,11 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onViewSwipedToRight(int position) {
             String swipedElement = swipeStackAdapter.getItem(position);
-            imagesPointer += 1;
+            Log.d("INFO", "onViewSwipedToRight:" + swipedElement);
             System.out.println("Right");
+
+            // Add image to database.
+            addToPictures(swipedElement);
 
             // Reset overlay color
             overlay.setBackgroundColor(Color.parseColor("#00FFFFFF"));
@@ -237,6 +244,29 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         }
 
         return "#" + hexAlpha + baseColor;
+    }
+
+    public void addToPictures(String path) {
+        SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
+
+        String[] slicedPath = path.split("/");
+        String name = slicedPath[slicedPath.length - 1];
+        String album = slicedPath[slicedPath.length - 2];
+
+        System.out.println(name + "::" + album);
+
+        if (!(db.inPictures(name))) {
+            db.insertPicture(name, album);
+        }
+    }
+
+    public void addToBin(String path) {
+        SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
+
+        String[] slicedPath = path.split("/");
+        String name = slicedPath[slicedPath.length - 1];
+
+        db.insertToList("bin", db.getIdFromName(name));
     }
 
 }
