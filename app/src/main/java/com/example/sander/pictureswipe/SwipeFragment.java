@@ -3,6 +3,7 @@ package com.example.sander.pictureswipe;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +45,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     private SwipeProgressListener swipeProgressListener;
     TextView positionss, progressss;
     Button bin, fav, next;
+    RelativeLayout overlay;
 
 
     @Override
@@ -57,6 +60,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         bin = view.findViewById(R.id.addBin);
         fav = view.findViewById(R.id.addFavorite);
         next = view.findViewById(R.id.next);
+        overlay = view.findViewById(R.id.swipeColor);
         bin.setOnClickListener(this);
         fav.setOnClickListener(this);
         next.setOnClickListener(this);
@@ -185,12 +189,21 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         public void onSwipeProgress(int position, float progress) {
             //positionss.setText(String.valueOf(position));
             progressss.setText(String.valueOf(progress));
+            overlay.setBackgroundColor(Color.parseColor(calculateColor(progress)));
         }
 
         @Override
         public void onSwipeEnd(int position) {
 
         }
+    }
+
+    public String calculateColor(float progress) {
+        float alpha = progress * 255;
+        String hexAlpha= Integer.toString(Math.round(alpha), 16);
+        String baseColor = "F10909";
+
+        return "#" + hexAlpha + baseColor;
     }
 
 
