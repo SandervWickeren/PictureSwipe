@@ -17,19 +17,30 @@
         >
 
 
-        <ImageView
-            android:id="@+id/cardImage"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            card_view:srcCompat="@drawable/higlight_color" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textViewCard"
-            android:layout_width="wrap_content"
-            android:paddingStart="10dp"
-            android:layout_gravity="bottom"
-            android:layout_height="wrap_content"
-            android:text="Test" />
+            <ImageView
+                android:id="@+id/cardImage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                card_view:srcCompat="@drawable/higlight_color" />
+
+            <TextView
+                android:id="@+id/textViewCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="10dp"
+                android:layout_gravity="bottom"
+                android:text="Name" />
+        </LinearLayout>
 
 
     </android.support.v7.widget.CardView>

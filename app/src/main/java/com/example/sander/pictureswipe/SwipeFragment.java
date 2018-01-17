@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     private SwipeStackAdapter swipeStackAdapter;
     private SwipeStackListener swipeStackListener;
     private SwipeProgressListener swipeProgressListener;
-    TextView positionss, progressss, color;
+    TextView positionss;
     Button bin, fav, next;
     RelativeLayout overlay;
 
@@ -57,8 +58,6 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
 
         mSwipeStack = view.findViewById(R.id.swipeStack);
         positionss = view.findViewById(R.id.positions);
-        progressss = view.findViewById(R.id.progressions);
-        color = view.findViewById(R.id.color);
         bin = view.findViewById(R.id.addBin);
         fav = view.findViewById(R.id.addFavorite);
         next = view.findViewById(R.id.next);
@@ -169,7 +168,11 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             }
 
             TextView textViewCard = (TextView) convertView.findViewById(R.id.textViewCard);
-            textViewCard.setText(mData.get(position));
+
+            String[] splitPath = mData.get(position).split("/");
+            String imageName = splitPath[splitPath.length - 1];
+            textViewCard.setText(imageName);
+
             positionss.setText(String.valueOf(imagesPointer));
 
             ImageView imageView = convertView.findViewById(R.id.cardImage);
@@ -182,29 +185,20 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             }
             return convertView;
         }
-
-
     }
 
     public class SwipeProgressListener implements SwipeStack.SwipeProgressListener {
 
         @Override
-        public void onSwipeStart(int position) {
-
-        }
+        public void onSwipeStart(int position) {}
 
         @Override
         public void onSwipeProgress(int position, float progress) {
-            //positionss.setText(String.valueOf(position));
-            progressss.setText(String.valueOf(progress));
             overlay.setBackgroundColor(Color.parseColor(calculateColor(progress)));
-            color.setText(calculateColor(progress));
         }
 
         @Override
-        public void onSwipeEnd(int position) {
-
-        }
+        public void onSwipeEnd(int position) {}
     }
 
     /**
@@ -232,7 +226,6 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         } else {
             alpha = 0;
             baseColor = "FFFFFF";
-
         }
 
         // Convert the alpha to hex.
@@ -245,12 +238,5 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
 
         return "#" + hexAlpha + baseColor;
     }
-
-
-
-
-
-
-
 
 }
