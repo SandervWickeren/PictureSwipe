@@ -1,11 +1,18 @@
 package com.example.sander.pictureswipe;
 
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -21,4 +28,36 @@ public class BinFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_bin, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
+
+
+        test(db.selectAllBin("bin"));
+
+
+        generateLayout(db);
+
+    }
+
+    public void generateLayout(SqliteDatabase db) {
+        ListView listView = getView().findViewById(R.id.binList);
+        ListAdapter adapter = new PictureListAdapter(getContext(), db.selectAllBin("bin"));
+        listView.setAdapter(adapter);
+    }
+
+    public void test(Cursor bin) {
+        List<String> binImages = new ArrayList<>();
+
+        if (bin.moveToFirst()) {
+            while (!bin.isAfterLast()) {
+                String data = bin.getString(bin.getColumnIndex("name"));
+                System.out.println("FROM DATABASE: " + data);
+                bin.moveToNext();
+            }
+        }
+        bin.close();
+    }
 }

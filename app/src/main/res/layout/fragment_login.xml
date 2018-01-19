@@ -9,9 +9,21 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textColor="@color/colorLight"
         android:text="Login fragment" />
+
+    <Button
+        android:id="@+id/clearBin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear bin" />
+
+    <Button
+        android:id="@+id/clearPictures"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear pictures" />
 
 </LinearLayout>

@@ -96,8 +96,18 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(fragment);
 
                 } else if (id == R.id.navigation_swipe) {
-                    SwipeSetupFragment fragment = new SwipeSetupFragment();
-                    replaceFragment(fragment);
+                    SwipeFragment swipeFragment = new SwipeFragment();
+                    String backStateName = swipeFragment.getClass().getName();
+
+                    FragmentManager manager = getSupportFragmentManager();
+                    boolean fragmentPopped = manager.popBackStackImmediate(backStateName, 0);
+
+                    if (!fragmentPopped) {
+                        SwipeSetupFragment fragment = new SwipeSetupFragment();
+                        replaceFragment(fragment);
+                    } else {
+                        replaceFragment(swipeFragment);
+                    }
 
                     // Check if Swipefragment is active,
                     // otherwise launch SwipeSetup.

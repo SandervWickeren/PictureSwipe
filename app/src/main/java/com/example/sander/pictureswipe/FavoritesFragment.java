@@ -39,7 +39,7 @@ public class FavoritesFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, items);
         listView.setAdapter(adapter);*/
 
-        test(db.selectAllPictures());
+        test(db.selectAllPictures("pictures"));
 
 
         generateLayout(db);
@@ -48,7 +48,7 @@ public class FavoritesFragment extends Fragment {
 
     public void generateLayout(SqliteDatabase db) {
         ListView listView = getView().findViewById(R.id.favoriteList);
-        ListAdapter adapter = new PictureListAdapter(getContext(), db.selectAllPictures());
+        ListAdapter adapter = new PictureListAdapter(getContext(), db.selectAllPictures("pictures"));
         listView.setAdapter(adapter);
     }
 

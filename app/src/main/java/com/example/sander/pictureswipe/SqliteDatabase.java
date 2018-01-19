@@ -47,11 +47,24 @@ public class SqliteDatabase extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public Cursor selectAllPictures() {
+    public Cursor selectAllPictures(String table) {
         System.out.println("selectAllPictures is being runned.");
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT id AS _id, * FROM pictures;", null);
+        Cursor cursor = db.rawQuery("SELECT id AS _id, * FROM " + table + ";", null);
+
+        System.out.println(cursor.getCount());
+
+        return cursor;
+    }
+
+    public Cursor selectAllBin(String table) {
+        System.out.println("selectAllBin is being runned.");
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT id AS _id, * FROM pictures WHERE id IN (" +
+                "SELECT pictures_id FROM bin);", null);
+        Log.v("selectAllBin", dumpCursorToString(cursor));
 
         System.out.println(cursor.getCount());
 
@@ -126,21 +139,18 @@ public class SqliteDatabase extends SQLiteOpenHelper {
 
     /**
      * Delete pictures from the pictures table.
-     * @param id: ID from the item that has to be
      * removed.
      */
-    public void deletePicture(long id) {
+    public void deleteAllPictures() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM todo WHERE id=" + String.valueOf(id) + ";");
+        db.execSQL("DELETE FROM pictures;");
     }
 
     /**
      * Delete picture from either the bin or the favorites table
-     * @param table: Picture delete location
-     * @param id: ID from the pictures table.
      */
-    public void deleteFromList(String table, long id) {
+    public void deleteAllFromList() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + table +  " WHERE id=" + String.valueOf(id) + ";");
+        db.execSQL("DELETE FROM bin;");
     }
 }
