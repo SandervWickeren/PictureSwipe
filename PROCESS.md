@@ -34,4 +34,7 @@ Diary of progression trough the weeks.
  or bin database.
  - Temporary list under the FavoritesFragment containing all names from the 
  picture table --> Used to debug the db atm.
+ 
+ ### Thursday 18/01/18
+ - Because of the heavy storm and travelling all day, no progression :(.
 
