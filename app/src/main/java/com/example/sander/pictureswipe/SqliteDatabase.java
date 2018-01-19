@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import static android.database.DatabaseUtils.dumpCursorToString;
 
 /**
  * Class that is used to manage the local databases.
@@ -24,12 +27,12 @@ public class SqliteDatabase extends SQLiteOpenHelper {
         "name TEXT, album TEXT);");
 
         // Bin and favorites table
-        /*sqLiteDatabase.execSQL("CREATE TABLE bin (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        sqLiteDatabase.execSQL("CREATE TABLE bin (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
         "pictures_id INTEGER);");
 
         sqLiteDatabase.execSQL("CREATE TABLE favorites (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "pictures_id INTEGER);");
-*/
+
         // Add some test values
         sqLiteDatabase.execSQL("INSERT INTO pictures (name, album) VALUES ('Naam 1', 'Album 1');");
     }
@@ -81,11 +84,14 @@ public class SqliteDatabase extends SQLiteOpenHelper {
      * pictures table.
      */
     public long getIdFromName(String name) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM pictures WHERE name='" + name + "';", null);
-        int id_index = cursor.getColumnIndex("id");
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT id FROM pictures WHERE name='" + name + "';", null);
+        Log.v("desc", dumpCursorToString(cursor));
+        cursor.moveToFirst();
+        Integer id = cursor.getInt(0);
+        Log.d("id", id.toString());
 
-        return cursor.getLong(id_index);
+        return id;
     }
 
     /**
@@ -101,14 +107,20 @@ public class SqliteDatabase extends SQLiteOpenHelper {
         db.insert(table, null, contentValues);
     }
 
+    /**
+     * Checks if image already in pictures
+     * @param name
+     * @return
+     */
     public Boolean inPictures(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        try {
-            Cursor cursor = db.rawQuery("SELECT * FROM pictures WHERE name='" + name + "';", null);
-            return Boolean.TRUE;
-        } catch (Exception e) {
+        Cursor cursor = db.rawQuery("SELECT * FROM pictures WHERE name='" + name + "';", null);
+
+        if (cursor.getCount() == 0) {
             return Boolean.FALSE;
+        } else {
+            return Boolean.TRUE;
         }
     }
 

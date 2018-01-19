@@ -255,15 +255,23 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
 
         System.out.println(name + "::" + album);
 
-        db.insertPicture(name, album);
-
+        System.out.println(db.inPictures(name));
+        if (!(db.inPictures(name))) {
+            db.insertPicture(name, album);
+        }
     }
 
     public void addToBin(String path) {
+        // Put in 'done' db.
+        addToPictures(path);
+
+        // Add to bin db
         SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
 
         String[] slicedPath = path.split("/");
         String name = slicedPath[slicedPath.length - 1];
+
+        System.out.println(db.getIdFromName(name));
 
         db.insertToList("bin", db.getIdFromName(name));
     }
