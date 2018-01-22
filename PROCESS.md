@@ -45,6 +45,12 @@ Diary of progression trough the weeks.
  - Added temporary clear db buttons in account fragment.
  
  ### Monday 22/01/18
-
+- Researching the use of GridView.
+- Adding 'path' into database.
+  - Took an extra amount of time because the application was reusing backups from
+  previous databases of the same app. Because this backup database has a different
+  structure, errors kept coming. Fixed it eventually by overwriting the allowance
+  for backups ('ll re-enable it at release).
+- Succesfully created GridView containing images from the Bin Database using Picasso.
  
 
