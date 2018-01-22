@@ -11,7 +11,7 @@ Diary of progression trough the weeks.
 - Added supported formats: .png, .jpg, .jpeg
 - BUG 1: Cards are randomly getting skipped --> Possible library bug
   
-  ### Tuesday 16/01/18
+### Tuesday 16/01/18
  - Designed SQLite tables
  - Add and delete functions for SQlite tables written
  - Singleton class necessary for the database added
@@ -37,4 +37,13 @@ Diary of progression trough the weeks.
  
  ### Thursday 18/01/18
  - Because of the heavy storm and travelling all day, no progression :(.
+ 
+ ### Friday 19/01/18
+ - Fixed errors when adding pictures to bin / pictures database.
+ - Binfragment now shows list of files inside the bin
+ - Swipefragment no longer resets on regaining focus.
+ 
+ ### Monday 22/01/18
+
+ 
 
