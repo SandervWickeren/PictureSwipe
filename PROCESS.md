@@ -42,6 +42,7 @@ Diary of progression trough the weeks.
  - Fixed errors when adding pictures to bin / pictures database.
  - Binfragment now shows list of files inside the bin
  - Swipefragment no longer resets on regaining focus.
+ - Added temporary clear db buttons in account fragment.
  
  ### Monday 22/01/18
 
