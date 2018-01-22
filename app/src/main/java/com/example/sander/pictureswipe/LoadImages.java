@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class that handles the loading and processing of images.
+ * Class that handles the loading and processing of images from the local storage.
  */
 
 public class LoadImages {

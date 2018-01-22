@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -34,18 +35,22 @@ public class BinFragment extends Fragment {
 
         SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
 
+        GridView gridView = view.findViewById(R.id.binImageGrid);
+        PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("bin"));
+        gridView.setAdapter(pictureGridAdapter);
+
 
         test(db.selectAllBin("bin"));
 
 
-        generateLayout(db);
+        //generateLayout(db);
 
     }
 
     public void generateLayout(SqliteDatabase db) {
-        ListView listView = getView().findViewById(R.id.binList);
+        /*ListView listView = getView().findViewById(R.id.binList);
         ListAdapter adapter = new PictureListAdapter(getContext(), db.selectAllBin("bin"));
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapter);*/
     }
 
     public void test(Cursor bin) {

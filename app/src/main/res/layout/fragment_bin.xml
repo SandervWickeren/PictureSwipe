@@ -15,23 +15,16 @@
         android:textColor="@color/colorLight"
         android:text="Bin fragment" />
 
-    <ListView
-        android:id="@+id/binList"
-        android:layout_width="match_parent"
-        android:layout_weight="5"
-        android:layout_height="match_parent" />
-
     <GridView
         android:id="@+id/binImageGrid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:layout_weight="1"
         android:columnWidth="90dp"
         android:numColumns="auto_fit"
-        android:verticalSpacing="5dp"
-        android:horizontalSpacing="5dp"
-        android:stretchMode="columnWidth"
-        android:gravity="center">
+        android:verticalSpacing="2dp"
+        android:horizontalSpacing="2dp"
+        android:stretchMode="columnWidth">
     </GridView>
 
 </LinearLayout>
