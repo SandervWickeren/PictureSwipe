@@ -2,8 +2,10 @@ package com.example.sander.pictureswipe;
 
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -25,6 +27,7 @@ import static android.app.Activity.RESULT_OK;
 public class SwipeSetupFragment extends Fragment implements View.OnClickListener {
 
     public static final int GALLERY_REQUEST = 10;
+    private final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +39,39 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
         select.setOnClickListener(this);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        GrandPermissions grandPermissions = new GrandPermissions();
+        grandPermissions.checkReadPermission(getActivity(), REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSION_READ_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
     }
 
     @Override

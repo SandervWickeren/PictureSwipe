@@ -2,6 +2,7 @@ package com.example.sander.pictureswipe;
 
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -107,6 +108,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
 
     public class SwipeStackListener implements SwipeStack.SwipeStackListener{
 
@@ -257,7 +259,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
 
         System.out.println(db.inPictures(name));
         if (!(db.inPictures(name))) {
-            db.insertPicture(name, album);
+            db.insertPicture(name, album, path);
         }
     }
 

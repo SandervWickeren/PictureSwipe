@@ -24,7 +24,7 @@ public class SqliteDatabase extends SQLiteOpenHelper {
 
         // Pictures table
         sqLiteDatabase.execSQL("CREATE TABLE pictures (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "name TEXT, album TEXT);");
+        "name TEXT, album TEXT, path TEXT);");
 
         // Bin and favorites table
         sqLiteDatabase.execSQL("CREATE TABLE bin (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -34,7 +34,7 @@ public class SqliteDatabase extends SQLiteOpenHelper {
                 "pictures_id INTEGER);");
 
         // Add some test values
-        sqLiteDatabase.execSQL("INSERT INTO pictures (name, album) VALUES ('Naam 1', 'Album 1');");
+        sqLiteDatabase.execSQL("INSERT INTO pictures (name, album, path) VALUES ('Naam 1', 'Album 1', '/Storage/no/clue');");
     }
 
     @Override
@@ -76,11 +76,12 @@ public class SqliteDatabase extends SQLiteOpenHelper {
      * @param name
      * @param album
      */
-    public void insertPicture(String name, String album) {
+    public void insertPicture(String name, String album, String path) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("album", album);
+        contentValues.put("path", path);
 
         long result = db.insert("pictures", null, contentValues);
         if (result == -1) {
@@ -152,5 +153,13 @@ public class SqliteDatabase extends SQLiteOpenHelper {
     public void deleteAllFromList() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM bin;");
+    }
+
+    public void deepDelete() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("pictures", null, null);
+        db.delete("bin", null, null);
+        db.delete("favorites", null, null);
+
     }
 }

@@ -26,6 +26,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         cBin.setOnClickListener(this);
         Button cPictures = v.findViewById(R.id.clearPictures);
         cPictures.setOnClickListener(this);
+        Button dDelete = v.findViewById(R.id.deepCleanPictures);
+        dDelete.setOnClickListener(this);
 
         return v;
     }
@@ -42,7 +44,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 db.deleteAllPictures();
                 Toast.makeText(getActivity(), "Succesfully cleared pictures", Toast.LENGTH_SHORT).show();
                 break;
-
+            case R.id.deepCleanPictures:
+                db.deepDelete();
+                Toast.makeText(getActivity(), "Succesfully deep deleted", Toast.LENGTH_SHORT).show();
         }
 
     }

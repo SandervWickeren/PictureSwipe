@@ -26,4 +26,10 @@
         android:layout_height="wrap_content"
         android:text="Clear pictures" />
 
+    <Button
+        android:id="@+id/deepCleanPictures"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Deep clean" />
+
 </LinearLayout>
