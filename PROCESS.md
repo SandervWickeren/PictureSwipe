@@ -44,6 +44,8 @@ Diary of progression trough the weeks.
  - Swipefragment no longer resets on regaining focus.
  - Added temporary clear db buttons in account fragment.
  
+ ## Week 2
+ 
  ### Monday 22/01/18
 - Researching the use of GridView.
 - Adding 'path' into database.
