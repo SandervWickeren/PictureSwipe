@@ -232,13 +232,11 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             overlayIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_check_black_24dp));
             overlayIcon.setColorFilter(Color.parseColor(baseColorNext));
             alpha = (float)(Math.pow(150, (progress - 0.05)) / 50);
-            System.out.println(alpha);
 
         } else if (progress < -0.05) {
             overlayIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete_black_24dp));
             overlayIcon.setColorFilter(Color.parseColor(baseColorBin));
             alpha = (float)(Math.pow(150, (-1 * progress + 0.05)) / 50);
-            System.out.println(alpha);
 
         } else {
             alpha = 0;

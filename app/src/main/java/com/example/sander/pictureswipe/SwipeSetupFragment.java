@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,8 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
 
         Button select = view.findViewById(R.id.select);
         select.setOnClickListener(this);
+        ImageView selectAlbum = view.findViewById(R.id.addAlbum);
+        selectAlbum.setOnClickListener(this);
 
         return view;
     }
@@ -78,7 +81,9 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.select:
-                Toast.makeText(getActivity(), "Yes", Toast.LENGTH_SHORT).show();
+                selectGalleryImage(view);
+                break;
+            case R.id.addAlbum:
                 selectGalleryImage(view);
                 break;
         }
