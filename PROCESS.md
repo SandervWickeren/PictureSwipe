@@ -54,9 +54,19 @@ Diary of progression trough the weeks.
 - Succesfully created GridView containing images from the Bin Database using Picasso.
 - Now asking for permissions when it isn't granted yet (TODO: What if they decline?)
 
-### Tueseday 23/01/18
--
--
--
+### Tuesday 23/01/18
+- Favorites now also shows the correct pictures
+- Removal of unused class because of the switch from ListView to GridView
+- Changed BottomNavigation from (account, swipe, fav, bin) --> (bin, swipe, fav, account)
+- New transition when swiping images:
+  - Transparancy is now exponentially calculated instead of linear.
+  - The overlay is no longer a big square --> now meaningfull icons.
+- When clicking on the image at either favorites or bin the pictures 'll be shown bigger:
+  - Currently dialog fragment --> not sure if I keep it this way.
+- Current TODO's / Problems:
+  - Onclicklistener needs its own class --> Can't call .getactivity()
+  - Duplicate code / Overall code cleanup
+  - Ability to remove items from favorites / bin.
+  - Login and backup favorites.
  
 
