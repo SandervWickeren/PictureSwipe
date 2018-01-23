@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -39,17 +40,12 @@ public class FavoritesFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, items);
         listView.setAdapter(adapter);*/
 
+        GridView gridView = view.findViewById(R.id.favImageGrid);
+        PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("favorites"));
+        gridView.setAdapter(pictureGridAdapter);
+
         test(db.selectAllPictures("pictures"));
 
-
-        generateLayout(db);
-
-    }
-
-    public void generateLayout(SqliteDatabase db) {
-        ListView listView = getView().findViewById(R.id.favoriteList);
-        ListAdapter adapter = new PictureListAdapter(getContext(), db.selectAllPictures("pictures"));
-        listView.setAdapter(adapter);
     }
 
     public void test(Cursor cursor) {

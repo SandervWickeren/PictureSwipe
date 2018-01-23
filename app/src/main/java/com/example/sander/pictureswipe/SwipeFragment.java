@@ -102,6 +102,9 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
                 mSwipeStack.swipeTopViewToLeft();
                 break;
             case R.id.addFavorite:
+                String swipedElement = swipeStackAdapter.getItem(mSwipeStack.getCurrentPosition());
+                addToList(swipedElement, "favorites");
+                mSwipeStack.swipeTopViewToRight();
                 break;
             case R.id.next:
                 mSwipeStack.swipeTopViewToRight();
@@ -119,8 +122,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             System.out.println("Left");
 
             // Add image to bin.
-            addToPictures(swipedElement);
-            addToBin(swipedElement);
+            addToList(swipedElement, "bin");
 
             // Reset overlay color
             overlay.setBackgroundColor(Color.parseColor("#00FFFFFF"));
@@ -263,7 +265,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void addToBin(String path) {
+    public void addToList(String path, String table) {
         // Put in 'done' db.
         addToPictures(path);
 
@@ -275,7 +277,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
 
         System.out.println(db.getIdFromName(name));
 
-        db.insertToList("bin", db.getIdFromName(name));
+        db.insertToList(table, db.getIdFromName(name));
     }
 
 }

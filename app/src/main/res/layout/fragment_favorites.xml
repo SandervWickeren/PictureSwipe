@@ -15,10 +15,16 @@
         android:layout_weight="16"
         android:text="Favorites fragment" />
 
-    <ListView
-        android:id="@+id/favoriteList"
+    <GridView
+        android:id="@+id/favImageGrid"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_height="match_parent" />
+        android:columnWidth="90dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="2dp"
+        android:horizontalSpacing="2dp"
+        android:stretchMode="columnWidth">
+    </GridView>
 
 </LinearLayout>

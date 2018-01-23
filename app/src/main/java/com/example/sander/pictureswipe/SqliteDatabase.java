@@ -63,7 +63,7 @@ public class SqliteDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT id AS _id, * FROM pictures WHERE id IN (" +
-                "SELECT pictures_id FROM bin);", null);
+                "SELECT pictures_id FROM " + table +  ");", null);
         Log.v("selectAllBin", dumpCursorToString(cursor));
 
         System.out.println(cursor.getCount());
