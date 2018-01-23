@@ -52,5 +52,11 @@ Diary of progression trough the weeks.
   structure, errors kept coming. Fixed it eventually by overwriting the allowance
   for backups ('ll re-enable it at release).
 - Succesfully created GridView containing images from the Bin Database using Picasso.
+- Now asking for permissions when it isn't granted yet (TODO: What if they decline?)
+
+### Tueseday 23/01/18
+-
+-
+-
  
 
