@@ -41,16 +41,6 @@ public class BinFragment extends Fragment {
 
 
         test(db.selectAllBin("bin"));
-
-
-        //generateLayout(db);
-
-    }
-
-    public void generateLayout(SqliteDatabase db) {
-        /*ListView listView = getView().findViewById(R.id.binList);
-        ListAdapter adapter = new PictureListAdapter(getContext(), db.selectAllBin("bin"));
-        listView.setAdapter(adapter);*/
     }
 
     public void test(Cursor bin) {

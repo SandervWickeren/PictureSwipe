@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,9 +47,9 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     private SwipeStackAdapter swipeStackAdapter;
     private SwipeStackListener swipeStackListener;
     private SwipeProgressListener swipeProgressListener;
-    TextView positionss;
     Button bin, fav, next;
     RelativeLayout overlay;
+    ImageView overlayIcon;
 
 
     @Override
@@ -58,11 +59,11 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_swipe, container, false);
 
         mSwipeStack = view.findViewById(R.id.swipeStack);
-        positionss = view.findViewById(R.id.positions);
         bin = view.findViewById(R.id.addBin);
         fav = view.findViewById(R.id.addFavorite);
         next = view.findViewById(R.id.next);
         overlay = view.findViewById(R.id.swipeColor);
+        overlayIcon = view.findViewById(R.id.iconOverlay);
         bin.setOnClickListener(this);
         fav.setOnClickListener(this);
         next.setOnClickListener(this);
@@ -121,11 +122,13 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             Log.d("INFO", "onViewSwipedToLeft:" + swipedElement);
             System.out.println("Left");
 
-            // Add image to bin.
+            // Add image to SQlite bin table.
             addToList(swipedElement, "bin");
 
             // Reset overlay color
             overlay.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+            overlayIcon.setAlpha(0f);
+
         }
 
         @Override
@@ -139,6 +142,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
 
             // Reset overlay color
             overlay.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+            overlayIcon.setAlpha(0f);
         }
 
         @Override
@@ -184,13 +188,12 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             String imageName = splitPath[splitPath.length - 1];
             textViewCard.setText(imageName);
 
-            positionss.setText(String.valueOf(imagesPointer));
 
             ImageView imageView = convertView.findViewById(R.id.cardImage);
 
             File file = new File(mData.get(position));
             try {
-                Picasso.with(getContext()).load(file).error(R.drawable.higlight_color).resize(800, 800).centerInside().into(imageView);
+                Picasso.with(getContext()).load(file).error(R.drawable.higlight_color).fit().centerInside().into(imageView);
             } catch (Exception e) {
                 System.out.println("Couldn't load: " + mData.get(position));
             }
@@ -205,7 +208,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onSwipeProgress(int position, float progress) {
-            overlay.setBackgroundColor(Color.parseColor(calculateColor(progress)));
+            setIconOverlay(progress);
         }
 
         @Override
@@ -216,38 +219,33 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
      * Used to calculate the correct alpha and color for the overlay when moving
      * the picture to either left or right.
      * @param progress A float that represents how far it's from the end of the screen
-     * @return A string containing the hex-color.
      */
-    public String calculateColor(float progress) {
-        String baseColorNext = "29ABA4";
-        String baseColorBin = "EB7260";
+    public void setIconOverlay(float progress) {
+        String baseColorNext = "#29ABA4";
+        String baseColorBin = "#EB7260";
+        double prog;
         float alpha;
-        String baseColor;
 
         // Only start changing overlay color when the progress is more then
         // 0.05 to make it look smoother.
         if (progress > 0.05) {
-            alpha = progress * 255;
-            baseColor = baseColorNext;
+            overlayIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_check_black_24dp));
+            overlayIcon.setColorFilter(Color.parseColor(baseColorNext));
+            alpha = (float)(Math.pow(150, (progress - 0.05)) / 50);
+            System.out.println(alpha);
 
         } else if (progress < -0.05) {
-            alpha = (-1 * progress) * 255;
-            baseColor = baseColorBin;
+            overlayIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete_black_24dp));
+            overlayIcon.setColorFilter(Color.parseColor(baseColorBin));
+            alpha = (float)(Math.pow(150, (-1 * progress + 0.05)) / 50);
+            System.out.println(alpha);
 
         } else {
             alpha = 0;
-            baseColor = "FFFFFF";
         }
 
-        // Convert the alpha to hex.
-        String hexAlpha= Integer.toString(Math.round(alpha), 16);
+        overlayIcon.setAlpha(alpha);
 
-        // If the size of the hex is to small an extra padding of one 0 is necessary.
-        if (hexAlpha.length() < 2) {
-            hexAlpha = "0" + hexAlpha;
-        }
-
-        return "#" + hexAlpha + baseColor;
     }
 
     public void addToPictures(String path) {

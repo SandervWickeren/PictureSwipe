@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/gridImage"
         android:layout_width="match_parent"
-        android:layout_height="105dp"
+        android:layout_height="120dp"
         app:srcCompat="@color/colorDarkBackground" />
 
 </LinearLayout>
