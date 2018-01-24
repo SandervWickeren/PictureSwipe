@@ -1,10 +1,12 @@
 package com.example.sander.pictureswipe;
 
 
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,7 +37,6 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
         Button cancel = view.findViewById(R.id.cancel);
         accept.setOnClickListener(this);
         cancel.setOnClickListener(this);
-
 
         return view;
     }
@@ -77,9 +78,12 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
                 // Transform each path into a file
                 File image = new File(path);
 
-                // Remove the file
+                // Remove the image using contentResolver to make sure it won't show up again and
+                // the gallery rescans the folders.
                 if (image.exists()) {
-                    boolean deleted = image.delete();
+                    ContentResolver contentResolver = getActivity().getContentResolver();
+                    contentResolver.delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            MediaStore.Images.ImageColumns.DATA + "=?", new String[]{path});
                 }
                 cursor.moveToNext();
             }
@@ -92,12 +96,11 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
 
         // Clear bin and reload BinFragment / Gallery.
         db.deleteAllFromList();
-        reloadBinAndGallery();
+        reloadBin();
 
     }
 
-    public void reloadBinAndGallery() {
-
+    public void reloadBin() {
         // Get BinFragment from manager
         Fragment fragment = getActivity()
                 .getSupportFragmentManager()
@@ -108,16 +111,6 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
         ft.detach(fragment);
         ft.attach(fragment);
         ft.commit();
-
-        // Reload gallery
-        MediaScannerConnection.scanFile(getActivity(),
-                new String[]{Environment.getExternalStorageDirectory().toString()}, null,
-                new MediaScannerConnection.OnScanCompletedListener() {
-            @Override
-            public void onScanCompleted(String s, Uri uri) {
-
-            }
-        });
     }
 
 }
