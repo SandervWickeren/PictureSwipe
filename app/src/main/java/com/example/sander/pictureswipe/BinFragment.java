@@ -7,12 +7,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +31,10 @@ public class BinFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        // Allows the fragment to use it's own actionbar.
+        setHasOptionsMenu(true);
+
         return inflater.inflate(R.layout.fragment_bin, container, false);
     }
 
@@ -42,22 +49,34 @@ public class BinFragment extends Fragment {
         PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("bin"));
         gridView.setAdapter(pictureGridAdapter);
 
-
-        test(db.selectAllBin("bin"));
     }
 
-    public void test(Cursor bin) {
-        List<String> binImages = new ArrayList<>();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.actionbar_menu, menu);
+    }
 
-        if (bin.moveToFirst()) {
-            while (!bin.isAfterLast()) {
-                String data = bin.getString(bin.getColumnIndex("name"));
-                System.out.println("FROM DATABASE: " + data);
-                bin.moveToNext();
-            }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.deleteAll) {
+            deleteAllFromDevice();
         }
-        bin.close();
+
+        return true;
     }
+
+    public void deleteAllFromDevice() {
+
+        // Final user check using DialogFragment
+        ClearBinDialogFragment fragment = new ClearBinDialogFragment();
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        fragment.show(ft, "dialog");
+
+    }
+
+
 
     private class GridListener implements AdapterView.OnItemClickListener {
 

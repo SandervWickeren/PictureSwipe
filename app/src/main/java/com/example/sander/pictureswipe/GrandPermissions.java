@@ -24,5 +24,15 @@ public class GrandPermissions {
         }
     }
 
+    public void checkWritePermission(Activity activity, int request) {
+        int writePermission = ContextCompat.checkSelfPermission(activity.getApplicationContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (writePermission == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, request);
+        }
+    }
+
     // Response. https://developer.android.com/training/permissions/requesting.html#java
 }
