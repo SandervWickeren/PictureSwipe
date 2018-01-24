@@ -92,7 +92,7 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
 
         // Notify user
         Toast.makeText(getActivity(), "Removed " + String.valueOf(pictureCount)
-                + "images", Toast.LENGTH_SHORT).show();
+                + " images", Toast.LENGTH_SHORT).show();
 
         // Clear bin and reload BinFragment / Gallery.
         db.deleteAllFromList();

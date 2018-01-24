@@ -44,7 +44,6 @@ public class FavoritesFragment extends Fragment {
         gridView.setAdapter(pictureGridAdapter);
 
         test(db.selectAllPictures("pictures"));
-
     }
 
     public void test(Cursor cursor) {

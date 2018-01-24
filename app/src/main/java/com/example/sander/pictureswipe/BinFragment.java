@@ -4,6 +4,8 @@ package com.example.sander.pictureswipe;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -46,6 +48,7 @@ public class BinFragment extends Fragment {
 
         GridView gridView = view.findViewById(R.id.binImageGrid);
         gridView.setOnItemClickListener(new GridListener());
+        gridView.setOnItemLongClickListener(new GridLongListener());
         PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("bin"));
         gridView.setAdapter(pictureGridAdapter);
 
@@ -102,6 +105,33 @@ public class BinFragment extends Fragment {
             fragment.show(ft, "dialog");
 
 
+        }
+    }
+
+    private class GridLongListener implements AdapterView.OnItemLongClickListener {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+            System.out.println("LongClick");
+
+            // Get the cursor from the adapter
+            Cursor cursor = ((PictureGridAdapter)adapterView.getAdapter()).getCursor();
+
+            // Move it to the correct position
+            cursor.moveToPosition(position);
+
+            // Retrieve the path
+            String path = cursor.getString(cursor.getColumnIndex("path"));
+            String name = cursor.getString(cursor.getColumnIndex("name"));
+
+            // Create text
+            String info = "You removed " + name;
+
+            // Show Snackbar before removing
+            Snackbar.make(getActivity().findViewById(R.id.snackbarLocation), info, Snackbar.LENGTH_LONG).show();
+
+
+            return true;
         }
     }
 }
