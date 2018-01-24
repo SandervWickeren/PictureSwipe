@@ -70,5 +70,21 @@ Diary of progression trough the weeks.
   - Duplicate code / Overall code cleanup
   - Ability to remove items from favorites / bin.
   - Login and backup favorites.
+
+### Wednesday 24/01/18
+- Fixed crash when showing big pictures (>14MB) --> Size of the full screen image is now 
+determined by 1000 pixels width, and the correct aspect ratio for length.
+- Added Bin icon to ActionBar:
+  - Used to remove all pictures from the device
+  - User gets a DialogFragment which asks if the user is sure about the action.
+  - IMPORTANT: Images aren't always removed from the device because of the use of cloud services.
+  When the user has these enabled the gallery 'll be automatically updated with the image from the cloud.
+  There is no in-app solution, only users can disable this syncing.
+  - Gallery wasn't updating the removal of pictures --> Make use of ContentResolver to remove
+  images.
+  - Pictures can be removed from favorites or bin trough an onLongItemClick. To make it easier
+  for the user to understand a SnackBar 'll be shown with an undo option. To re-add the picture
+  to the specific list.
+
  
 
