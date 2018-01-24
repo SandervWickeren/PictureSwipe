@@ -36,6 +36,7 @@ public class FullscreenImageFragment extends DialogFragment {
         Picasso.with(getContext())
                 .load(image)
                 .placeholder(R.drawable.ic_wallpaper_black_24dp)
+                .resize(0, 1500)
                 .into(imageFullscreen);
 
         return view;
