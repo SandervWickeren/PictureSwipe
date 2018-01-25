@@ -118,7 +118,7 @@ public class BinFragment extends Fragment {
         db.deleteFromList(table, id);
 
         // Reload the GridView.
-        reloadBin();
+        ((MainActivity)getActivity()).reloadFragment(BinFragment.class.getName());
 
         // Create info string.
         String info = "You removed " + name;
@@ -136,7 +136,7 @@ public class BinFragment extends Fragment {
                         db.insertToList(table, id);
 
                         // Reload the GridView.
-                        reloadBin();
+                        ((MainActivity)getActivity()).reloadFragment(BinFragment.class.getName());
 
                         // Notify user that it has been restored
                         Snackbar undo = Snackbar.make(getActivity().findViewById(R.id.snackbarLocation),
@@ -149,20 +149,6 @@ public class BinFragment extends Fragment {
         delete.show();
 
     }
-
-    public void reloadBin() {
-        // Get BinFragment from manager
-        Fragment fragment = getActivity()
-                .getSupportFragmentManager()
-                .findFragmentByTag(BinFragment.class.getName());
-
-        // Reload the fragment
-        final FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.detach(fragment);
-        ft.attach(fragment);
-        ft.commit();
-    }
-
 
     private class GridLongListener implements AdapterView.OnItemLongClickListener {
 

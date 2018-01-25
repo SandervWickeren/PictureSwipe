@@ -62,6 +62,17 @@ public class MainActivity extends AppCompatActivity {
         updateNavigation(fragment);
     }
 
+    public void reloadFragment(String tag) {
+        // Get Fragment from manager
+        Fragment fragment = this.getSupportFragmentManager().findFragmentByTag(tag);
+
+        // Reload the fragment
+        final FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        ft.detach(fragment);
+        ft.attach(fragment);
+        ft.commit();
+    }
+
 
     /**
      * Used to catch data from the gallery. The process is launched

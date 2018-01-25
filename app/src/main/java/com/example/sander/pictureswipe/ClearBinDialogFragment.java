@@ -96,21 +96,8 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
 
         // Clear bin and reload BinFragment / Gallery.
         db.deleteAllFromList();
-        reloadBin();
+        ((MainActivity)getActivity()).reloadFragment(BinFragment.class.getName());
 
-    }
-
-    public void reloadBin() {
-        // Get BinFragment from manager
-        Fragment fragment = getActivity()
-                .getSupportFragmentManager()
-                .findFragmentByTag(BinFragment.class.getName());
-
-        // Reload the fragment
-        final FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.detach(fragment);
-        ft.attach(fragment);
-        ft.commit();
     }
 
 }
