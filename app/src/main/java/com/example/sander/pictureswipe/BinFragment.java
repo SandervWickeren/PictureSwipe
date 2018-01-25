@@ -4,7 +4,6 @@ package com.example.sander.pictureswipe;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,12 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -49,8 +42,12 @@ public class BinFragment extends Fragment {
         SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
 
         GridView gridView = view.findViewById(R.id.binImageGrid);
-        gridView.setOnItemClickListener(new GridListener());
-        gridView.setOnItemLongClickListener(new GridLongListener());
+
+        PictureGridHandler pictureGridHandler = new PictureGridHandler(getActivity(), "bin",
+                BinFragment.class.getName());
+
+        gridView.setOnItemClickListener(pictureGridHandler);
+        gridView.setOnItemLongClickListener(pictureGridHandler);
         PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("bin"));
         gridView.setAdapter(pictureGridAdapter);
 
@@ -70,7 +67,6 @@ public class BinFragment extends Fragment {
         if (id == R.id.deleteAll) {
             deleteAllFromDevice();
         }
-
         return true;
     }
 
@@ -81,90 +77,5 @@ public class BinFragment extends Fragment {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         fragment.show(ft, "dialog");
 
-    }
-
-
-
-    private class GridListener implements AdapterView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-            // Get the cursor from the adapter
-            Cursor cursor = ((PictureGridAdapter)adapterView.getAdapter()).getCursor();
-
-            // Move it to the correct position
-            cursor.moveToPosition(position);
-
-            // Retrieve the path
-            String path = cursor.getString(cursor.getColumnIndex("path"));
-
-            // Launch new fragment using the path
-            ((MainActivity)getActivity()).launchImageDialog(path);
-
-
-        }
-    }
-    public void snackbarHandler(final String name, final Integer id, final String table) {
-
-        // Remove item from table
-        final SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
-        db.deleteFromList(table, id);
-
-        // Reload the GridView.
-        ((MainActivity)getActivity()).reloadFragment(BinFragment.class.getName());
-
-        // Create info string.
-        String info = "You removed " + name;
-
-        // Create information snackbar with undo option. When the user presses the undo
-        // button, the image 'll be restored.
-        Snackbar delete = Snackbar
-                .make(getActivity().findViewById(R.id.snackbarLocation), info,
-                        Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        // Undo has been clicked and the image 'll be restored
-                        db.insertToList(table, id);
-
-                        // Reload the GridView.
-                        ((MainActivity)getActivity()).reloadFragment(BinFragment.class.getName());
-
-                        // Notify user that it has been restored
-                        Snackbar undo = Snackbar.make(getActivity().findViewById(R.id.snackbarLocation),
-                                "Succesfully restored the image!",
-                                Snackbar.LENGTH_SHORT);
-                        undo.show();
-                    }
-                });
-
-        delete.show();
-
-    }
-
-    private class GridLongListener implements AdapterView.OnItemLongClickListener {
-
-        @Override
-        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-            System.out.println("LongClick");
-
-            // Get the cursor from the adapter
-            Cursor cursor = ((PictureGridAdapter)adapterView.getAdapter()).getCursor();
-
-            // Move it to the correct position
-            cursor.moveToPosition(position);
-
-            // Retrieve name and id from the selected image.
-            final String name = cursor.getString(cursor.getColumnIndex("name"));
-            Integer id = cursor.getInt(cursor.getColumnIndex("id"));
-            System.out.println(id);
-
-            // Sent info to the SnackBarHandler
-            snackbarHandler(name, id, "bin");
-
-            return true;
-        }
     }
 }

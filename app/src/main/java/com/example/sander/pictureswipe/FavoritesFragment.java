@@ -38,8 +38,14 @@ public class FavoritesFragment extends Fragment {
         SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
 
         GridView gridView = view.findViewById(R.id.favImageGrid);
-        gridView.setOnItemClickListener(new RepeatGridListener());
 
+        // Initiate PictureGridHandler;
+        PictureGridHandler pictureGridHandler = new PictureGridHandler(getActivity(),
+                "favorites", FavoritesFragment.class.getName());
+        gridView.setOnItemClickListener(pictureGridHandler);
+        gridView.setOnItemLongClickListener(pictureGridHandler);
+
+        // Set adapter
         PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("favorites"));
         gridView.setAdapter(pictureGridAdapter);
 
@@ -55,25 +61,5 @@ public class FavoritesFragment extends Fragment {
             }
         }
         cursor.close();
-    }
-
-    private class RepeatGridListener implements AdapterView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-            // Get the cursor from the adapter
-            Cursor cursor = ((PictureGridAdapter)adapterView.getAdapter()).getCursor();
-
-            // Move it to the correct position
-            cursor.moveToPosition(position);
-
-            // Retrieve the path
-            String path = cursor.getString(cursor.getColumnIndex("path"));
-
-            // Launch new fragment using the path
-            ((MainActivity)getActivity()).launchImageDialog(path);
-
-        }
     }
 }
