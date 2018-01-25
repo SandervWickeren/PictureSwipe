@@ -72,14 +72,7 @@ public class FavoritesFragment extends Fragment {
             String path = cursor.getString(cursor.getColumnIndex("path"));
 
             // Launch new fragment using the path
-            Bundle bundle = new Bundle();
-            bundle.putString("path", path);
-            FullscreenImageFragment fragment = new FullscreenImageFragment();
-            fragment.setArguments(bundle);
-            //((MainActivity)getActivity()).replaceFragment(fragment);
-            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-            fragment.show(ft, "dialog");
-
+            ((MainActivity)getActivity()).launchImageDialog(path);
 
         }
     }

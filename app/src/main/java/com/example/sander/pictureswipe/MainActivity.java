@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -71,6 +72,19 @@ public class MainActivity extends AppCompatActivity {
         ft.detach(fragment);
         ft.attach(fragment);
         ft.commit();
+    }
+
+    public void launchImageDialog(String path) {
+
+        // Set up the bundle containing the path.
+        Bundle bundle = new Bundle();
+        bundle.putString("path", path);
+
+        // Initiate the dialog transaction.
+        FullscreenImageFragment fragment = new FullscreenImageFragment();
+        fragment.setArguments(bundle);
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        fragment.show(ft, "dialog");
     }
 
 
