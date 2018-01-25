@@ -30,6 +30,8 @@ import java.util.List;
  */
 public class BinFragment extends Fragment {
 
+    PictureGridAdapter pictureGridAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class BinFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+
+        // Inflate custom actionbar.
         inflater.inflate(R.menu.actionbar_menu, menu);
     }
 
@@ -72,7 +76,7 @@ public class BinFragment extends Fragment {
 
     public void deleteAllFromDevice() {
 
-        // Final user check using DialogFragment
+        // Final user-check using DialogFragment
         ClearBinDialogFragment fragment = new ClearBinDialogFragment();
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         fragment.show(ft, "dialog");
@@ -107,6 +111,58 @@ public class BinFragment extends Fragment {
 
         }
     }
+    public void snackbarHandler(final String name, final Integer id, final String table) {
+
+        // Remove item from table
+        final SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
+        db.deleteFromList(table, id);
+
+        // Reload the GridView.
+        reloadBin();
+
+        // Create info string.
+        String info = "You removed " + name;
+
+        // Create information snackbar with undo option. When the user presses the undo
+        // button, the image 'll be restored.
+        Snackbar delete = Snackbar
+                .make(getActivity().findViewById(R.id.snackbarLocation), info,
+                        Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        // Undo has been clicked and the image 'll be restored
+                        db.insertToList(table, id);
+
+                        // Reload the GridView.
+                        reloadBin();
+
+                        // Notify user that it has been restored
+                        Snackbar undo = Snackbar.make(getActivity().findViewById(R.id.snackbarLocation),
+                                "Succesfully restored the image!",
+                                Snackbar.LENGTH_SHORT);
+                        undo.show();
+                    }
+                });
+
+        delete.show();
+
+    }
+
+    public void reloadBin() {
+        // Get BinFragment from manager
+        Fragment fragment = getActivity()
+                .getSupportFragmentManager()
+                .findFragmentByTag(BinFragment.class.getName());
+
+        // Reload the fragment
+        final FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.detach(fragment);
+        ft.attach(fragment);
+        ft.commit();
+    }
+
 
     private class GridLongListener implements AdapterView.OnItemLongClickListener {
 
@@ -120,16 +176,13 @@ public class BinFragment extends Fragment {
             // Move it to the correct position
             cursor.moveToPosition(position);
 
-            // Retrieve the path
-            String path = cursor.getString(cursor.getColumnIndex("path"));
-            String name = cursor.getString(cursor.getColumnIndex("name"));
+            // Retrieve name and id from the selected image.
+            final String name = cursor.getString(cursor.getColumnIndex("name"));
+            Integer id = cursor.getInt(cursor.getColumnIndex("id"));
+            System.out.println(id);
 
-            // Create text
-            String info = "You removed " + name;
-
-            // Show Snackbar before removing
-            Snackbar.make(getActivity().findViewById(R.id.snackbarLocation), info, Snackbar.LENGTH_LONG).show();
-
+            // Sent info to the SnackBarHandler
+            snackbarHandler(name, id, "bin");
 
             return true;
         }

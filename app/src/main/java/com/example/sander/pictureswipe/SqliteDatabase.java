@@ -33,8 +33,6 @@ public class SqliteDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE favorites (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "pictures_id INTEGER);");
 
-        // Add some test values
-        sqLiteDatabase.execSQL("INSERT INTO pictures (name, album, path) VALUES ('Naam 1', 'Album 1', '/Storage/no/clue');");
     }
 
     @Override
@@ -119,6 +117,11 @@ public class SqliteDatabase extends SQLiteOpenHelper {
         contentValues.put("pictures_id", id);
 
         db.insert(table, null, contentValues);
+    }
+
+    public void deleteFromList(String table, long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + table + " WHERE pictures_id='" + id + "';");
     }
 
     /**
