@@ -3,6 +3,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/colorDarkBackground"
     tools:context="com.example.sander.pictureswipe.RegisterFragment">
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:backgroundTint="@color/colorLight"
+        android:textColorHint="@color/colorLight"
+        android:textColor="@color/colorLight"
+        android:hint="Email" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Password"
+        android:backgroundTint="@color/colorLight"
+        android:textColorHint="@color/colorLight"
+        android:textColor="@color/colorLight"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/passwordRepeat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Repeat password"
+        android:backgroundTint="@color/colorLight"
+        android:textColorHint="@color/colorLight"
+        android:textColor="@color/colorLight"
+        android:inputType="textPassword" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="back" />
+
+        <Button
+            android:id="@+id/register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Register" />
+    </LinearLayout>
 
 </LinearLayout>

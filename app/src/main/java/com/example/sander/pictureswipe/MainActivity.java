@@ -17,9 +17,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         // Set backstack listener
         getSupportFragmentManager().addOnBackStackChangedListener(new backstackListener());
 
+        // Get firebase reference
+        mAuth = FirebaseAuth.getInstance();
     }
 
     /**
@@ -140,13 +146,13 @@ public class MainActivity extends AppCompatActivity {
                     // otherwise launch SwipeSetup.
 
                 } else if (id == R.id.navigation_account) {
-                    /*if (mAuth.getCurrentUser() == null) {
-                        Loginfragment fragment = new Loginfragment();
+                    if (mAuth.getCurrentUser() == null) {
+                        LoginFragment fragment = new LoginFragment();
                         replaceFragment(fragment);
                     } else {
-                        Profilefragment fragment = new Profilefragment();
+                        AccountFragment fragment = new AccountFragment();
                         replaceFragment(fragment);
-                    }*/
+                    }
                     LoginFragment fragment = new LoginFragment();
                     replaceFragment(fragment);
                 } else if (id == R.id.navigation_bin) {
