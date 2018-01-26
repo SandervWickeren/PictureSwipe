@@ -2,11 +2,17 @@ package com.example.sander.pictureswipe;
 
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,7 +20,17 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -24,9 +40,16 @@ import java.util.ArrayList;
  */
 public class FavoritesFragment extends Fragment {
 
+    private StorageReference mStorageRef;
+    private FirebaseAuth mAuth;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Allows the fragment to use it's own actionbar.
+        setHasOptionsMenu(true);
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favorites, container, false);
     }
@@ -49,7 +72,108 @@ public class FavoritesFragment extends Fragment {
         PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("favorites"));
         gridView.setAdapter(pictureGridAdapter);
 
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        StorageReference imageReference = mStorageRef.child("favorites");
+
         test(db.selectAllPictures("pictures"));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        // Inflate custom actionbar when logged in.
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            inflater.inflate(R.menu.actionbar_favorites, menu);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.syncAll) {
+            syncWithCloud();
+        }
+        return true;
+    }
+
+    public void syncWithCloud() {
+
+        // Get the database cursor
+        SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
+        Cursor cursor = db.selectAllBin("favorites");
+
+        // Check for every file if an upload is needed
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+
+                // Retrieve the path
+                String path = cursor.getString(cursor.getColumnIndex("path"));
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+
+                // Handle upload
+                inStorage(name, path);
+
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+
+
+    }
+
+    public void inStorage(final String name, final String path) {
+        mStorageRef.child(mAuth.getCurrentUser().getUid() + "/" + name).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // It's already in the cloud, so no upload needed.
+                System.out.println(name + " is already in the cloud");
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Not in the cloud, upload needed.
+                uploadFile(name, path);
+                System.out.println("Name: " + name + " and path: " + path);
+            }
+        });
+
+    }
+
+    public void downloadFile(String name, String path) {
+
+    }
+
+    public void uploadFile(String name, String path) {
+        Uri file = Uri.fromFile(new File(path));
+        StorageReference riversRef = mStorageRef.child(mAuth.getCurrentUser().getUid() + "/" + name);
+
+        riversRef.putFile(file)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Toast.makeText(getActivity(), "Succesfully uploaded to the cloud", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        // ...
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        System.out.println("Upload is " + progress + "% done");
+                    }
+                });
+
     }
 
     public void test(Cursor cursor) {
