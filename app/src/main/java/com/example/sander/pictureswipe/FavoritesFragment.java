@@ -146,6 +146,29 @@ public class FavoritesFragment extends Fragment {
 
     }
 
+    public void removeFile(final String name) {
+        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        // Create a reference to the file to delete
+        StorageReference desertRef = mStorageRef.child(mAuth.getCurrentUser().getUid() + "/" + name);
+
+        // Delete the file
+        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+            }
+        });
+
+    }
+
     public void uploadFile(String name, String path) {
         Uri file = Uri.fromFile(new File(path));
         StorageReference riversRef = mStorageRef.child(mAuth.getCurrentUser().getUid() + "/" + name);

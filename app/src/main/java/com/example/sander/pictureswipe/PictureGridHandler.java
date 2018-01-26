@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -94,6 +95,16 @@ public class PictureGridHandler implements GridView.OnItemClickListener, GridVie
                                 "Succesfully restored the image!",
                                 Snackbar.LENGTH_SHORT);
                         undo.show();
+                    }
+                }).addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        // If the user hasn't pressed 'UNDO' and the SnackBar is timed out
+                        // remove the picture from FireBase (to minimize bandwidth).
+                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                            FavoritesFragment fragment = new FavoritesFragment();
+                            fragment.removeFile(name);
+                        }
                     }
                 });
 
