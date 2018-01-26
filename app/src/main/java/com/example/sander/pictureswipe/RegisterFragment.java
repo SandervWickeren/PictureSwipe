@@ -93,7 +93,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    public void createUser(final String email, String password) {
+    public void createUser(final String email, final String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -132,6 +132,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                                 Toast.makeText(getActivity(),
                                         "An error occured, please try it again.",
                                         Toast.LENGTH_SHORT).show();
+                                System.out.println(email + " : " + password);
                                 e.printStackTrace();
                             }
                         }

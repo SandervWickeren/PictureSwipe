@@ -12,12 +12,20 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -146,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
                     // otherwise launch SwipeSetup.
 
                 } else if (id == R.id.navigation_account) {
+                    System.out.println(mAuth.getCurrentUser());
                     if (mAuth.getCurrentUser() == null) {
                         LoginFragment fragment = new LoginFragment();
                         replaceFragment(fragment);
@@ -153,8 +162,6 @@ public class MainActivity extends AppCompatActivity {
                         AccountFragment fragment = new AccountFragment();
                         replaceFragment(fragment);
                     }
-                    LoginFragment fragment = new LoginFragment();
-                    replaceFragment(fragment);
                 } else if (id == R.id.navigation_bin) {
                     BinFragment fragment = new BinFragment();
                     replaceFragment(fragment);
@@ -219,6 +226,4 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
-
 }

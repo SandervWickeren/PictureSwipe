@@ -107,6 +107,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             // Get current user
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            // Replace fragment
+                            AccountFragment fragment = new AccountFragment();
+                            ((MainActivity)getActivity()).replaceFragment(fragment);
+
 
                         } else {
                             // Check failure and give feedback

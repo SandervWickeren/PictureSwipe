@@ -49,7 +49,7 @@
         android:backgroundTint="@color/colorLight"
         android:textColorHint="@color/colorLight"
         android:textColor="@color/colorLight"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         />
 
     <EditText

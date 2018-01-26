@@ -26,6 +26,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
         logOut = view.findViewById(R.id.logOut);
+        logOut.setOnClickListener(this);
 
         return view;
     }
