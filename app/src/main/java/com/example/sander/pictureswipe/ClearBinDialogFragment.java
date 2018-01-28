@@ -46,10 +46,10 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
         switch (view.getId()) {
             case R.id.accept:
                 clearBin();
-                getDialog().cancel();
+                getDialog().dismiss();
                 break;
             case R.id.cancel:
-                getDialog().cancel();
+                getDialog().dismiss();
                 break;
         }
     }

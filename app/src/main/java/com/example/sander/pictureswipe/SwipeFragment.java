@@ -160,7 +160,10 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onStackEmpty() {
-            Toast.makeText(getActivity(), "Empty stack", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "You've finished the album, " +
+                    "please select another one", Toast.LENGTH_SHORT).show();
+            Fragment fragment = new SwipeSetupFragment();
+            ((MainActivity)getActivity()).replaceFragment(fragment);
         }
 
     }

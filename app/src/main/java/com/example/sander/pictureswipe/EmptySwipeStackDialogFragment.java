@@ -32,28 +32,23 @@ public class EmptySwipeStackDialogFragment extends DialogFragment implements Vie
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        launchSwipeSetup();
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        Fragment fragment = new SwipeSetupFragment();
+        ((MainActivity)getActivity()).replaceFragment(fragment);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cancel:
-                launchSwipeSetup();
                 getDialog().cancel();
                 break;
             case R.id.yes:
                 clearAlbumFromPictures();
-                getDialog().cancel();
+                getDialog().dismiss();
                 break;
         }
-    }
-
-    public void launchSwipeSetup() {
-        Fragment fragment = new SwipeSetupFragment();
-        ((MainActivity)getActivity()).replaceFragment(fragment);
     }
 
     public void clearAlbumFromPictures() {
