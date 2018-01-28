@@ -90,6 +90,36 @@ public class SqliteDatabase extends SQLiteOpenHelper {
     }
 
     /**
+     * Deletes item from the pictures table if it's not a favorite picture.
+     * @param name of a picture from the album.
+     */
+    public void deleteAlbumFromPictures(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Get the id from the name
+        long id = getIdFromName(name);
+
+        // Get the album name
+        Cursor cursor = db.rawQuery("SELECT album FROM pictures WHERE id=" + id + ";", null);
+        cursor.moveToFirst();
+        String album = cursor.getString(0);
+
+        System.out.println(album + " :: " + id);
+        cursor.close();
+
+        // Get the id
+        Cursor cursor2 = db.rawQuery("SELECT id FROM pictures WHERE album='" + album + "' AND id" +
+                " NOT IN (SELECT pictures_id FROM favorites);", null);
+        System.out.println(dumpCursorToString(cursor2));
+
+        db.execSQL("DELETE FROM pictures WHERE album='" + album + "' AND id" +
+                " NOT IN (SELECT pictures_id FROM favorites);");
+       /* db.execSQL("DELETE FROM pictures WHERE id IN (SELECT id FROM pictures WHERE album='" + album + "' AND id" +
+                " NOT IN (SELECT pictures_id FROM favorites));");*/
+    }
+
+
+    /**
      * @param name: Name of the file from which it
      * has to determine the ID.
      * @return: The ID from the given name in the

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
@@ -39,7 +40,8 @@ public class PictureGridHandler implements GridView.OnItemClickListener, GridVie
         String path = cursor.getString(cursor.getColumnIndex("path"));
 
         // Launch new fragment using the path
-        ((MainActivity)mContext).launchImageDialog(path);
+        DialogFragment fragment = new FullscreenImageFragment();
+        ((MainActivity)mContext).launchDialog(fragment, path);
     }
 
     @Override

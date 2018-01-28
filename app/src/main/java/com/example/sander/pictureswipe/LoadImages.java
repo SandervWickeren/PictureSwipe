@@ -23,8 +23,8 @@ public class LoadImages {
     }
 
     public List<String> getList(Context context, Uri uri) {
-        String initial_path = getRealPathFromUri(context, uri);
-        return genList(initial_path);
+        String initialPath = getRealPathFromUri(context, uri);
+        return genList(initialPath);
     }
 
     /**
@@ -49,9 +49,29 @@ public class LoadImages {
         }
     }
 
+    public Boolean checkDir(File dir) {
+        if (!dir.exists() || !dir.isDirectory()){
+            System.out.println("No such directory");
+            return Boolean.FALSE;
+        } else if (!dir.canRead()) {
+            System.out.println("Can't read");
+            return Boolean.FALSE;
+        } else {
+            return Boolean.TRUE;
+        }
+    }
+
+    public void removeFromPictures(String name) {
+
+        // Get database instance and remove item by name.
+        SqliteDatabase db = SqliteDatabaseSingleton.getInstance(mContext.getApplicationContext());
+        db.deleteAlbumFromPictures(name);
+    }
+
     /**
      * Uses a path from an images to index all files
-     * from its parent folder.
+     * from its parent folder. It restricts to only
+     * the images that aren't reviewed before.
      * @param path Path from the selected images.
      * @return List of files from the parent folder.
      */
@@ -68,27 +88,30 @@ public class LoadImages {
         // Use base folder to list all files from directory.
         File dir = new File(dirPath);
 
-        // Check for possible failures.
-        if (!dir.exists() || !dir.isDirectory()){
-            System.out.println("No such directory");
-        } else if (!dir.canRead()) {
-            System.out.println("Can't read");
-        }
-
-        // Supported file extensions.
-        String[] allowedExtensions = new String[] {"jpg", "jpeg", "png"};
-        File[] files = dir.listFiles();
-
-        // Get database instance
-        SqliteDatabase db = SqliteDatabaseSingleton.getInstance(mContext.getApplicationContext());
-
-        // Convert to list of string containing only allowed file extensions and
-        // check if not already reviewed.
+        // Empty list to save images
         List<String> imagePaths = new ArrayList<>();
-        for (File img:files){
-            for (String extension : allowedExtensions) {
-                if (img.getName().toLowerCase().endsWith(extension) && !(db.inPictures(img.getName()))) {
-                    imagePaths.add(img.toString());
+
+        if (checkDir(dir)) {
+
+            // Supported file extensions.
+            String[] allowedExtensions = new String[] {"jpg", "jpeg", "png"};
+            File[] files = dir.listFiles();
+
+            // Get database instance
+            SqliteDatabase db = SqliteDatabaseSingleton.getInstance(mContext.getApplicationContext());
+
+            // Convert to list of string containing only allowed file extensions and
+            // check if not already reviewed.
+            for (File img:files){
+                for (String extension : allowedExtensions) {
+
+                    // Check if valid extension
+                    Boolean allowed = img.getName().toLowerCase().endsWith(extension);
+
+                    // Add image to list if picture is valid and not in pictures table.
+                    if (allowed && !(db.inPictures(img.getName()))) {
+                        imagePaths.add(img.toString());
+                    }
                 }
             }
         }

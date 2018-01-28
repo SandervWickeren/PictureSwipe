@@ -88,14 +88,13 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    public void launchImageDialog(String path) {
+    public void launchDialog(DialogFragment fragment, String path) {
 
         // Set up the bundle containing the path.
         Bundle bundle = new Bundle();
         bundle.putString("path", path);
 
         // Initiate the dialog transaction.
-        FullscreenImageFragment fragment = new FullscreenImageFragment();
         fragment.setArguments(bundle);
         FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
         fragment.show(ft, "dialog");

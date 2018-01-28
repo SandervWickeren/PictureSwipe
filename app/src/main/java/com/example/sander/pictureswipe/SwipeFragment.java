@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -42,7 +43,6 @@ import link.fls.swipestack.SwipeStack;
 public class SwipeFragment extends Fragment implements View.OnClickListener {
 
     private List<String> images;
-    private Integer imagesPointer;
     private SwipeStack mSwipeStack;
     private SwipeStackAdapter swipeStackAdapter;
     private SwipeStackListener swipeStackListener;
@@ -58,6 +58,11 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_swipe, container, false);
 
+        // Load images
+        Bundle bundle = this.getArguments();
+        loadImages(bundle);
+
+        // Bind views
         mSwipeStack = view.findViewById(R.id.swipeStack);
         bin = view.findViewById(R.id.addBin);
         fav = view.findViewById(R.id.addFavorite);
@@ -68,32 +73,40 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         fav.setOnClickListener(this);
         next.setOnClickListener(this);
 
-        try {
-            Bundle bundle = this.getArguments();
-            Uri pictureUri = bundle.getParcelable("uri");
-
-            //Picasso.with(getContext()).load(pictureUri).into(imageView);
-
-            LoadImages loadImages = new LoadImages(getActivity());
-            images = loadImages.getList(getContext(), pictureUri);
-            System.out.println(images.size());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Set adapters and listeners
         swipeStackAdapter = new SwipeStackAdapter(images);
         swipeStackListener = new SwipeStackListener();
         swipeProgressListener = new SwipeProgressListener();
-        imagesPointer = 0;
         mSwipeStack.setAdapter(swipeStackAdapter);
         mSwipeStack.setListener(swipeStackListener);
         mSwipeStack.setSwipeProgressListener(swipeProgressListener);
+
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    public void loadImages(Bundle bundle) {
+        try {
+            Uri pictureUri = bundle.getParcelable("uri");
+
+            LoadImages loadImages = new LoadImages(getActivity());
+            images = loadImages.getList(getContext(), pictureUri);
+            System.out.println("Image in the list: " + images.size());
+
+            // Notify user with dialog when the album is already gone trough
+            if (images.size() == 0) {
+                String path = LoadImages.getRealPathFromUri(getActivity(), pictureUri);
+                EmptySwipeStackDialogFragment fragment = new EmptySwipeStackDialogFragment();
+                ((MainActivity)getActivity()).launchDialog(fragment, path);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
