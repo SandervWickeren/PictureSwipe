@@ -85,6 +85,18 @@ determined by 1000 pixels width, and the correct aspect ratio for length.
   - Pictures can be removed from favorites or bin trough an onLongItemClick. To make it easier
   for the user to understand a SnackBar 'll be shown with an undo option. To re-add the picture
   to the specific list.
+  
+  ### Thursday 25/01/18
+  - Implemented working SnackBar in both Bin and favorites.
+  - Added a reload fragment function to the MainActivity.
+  - Relocated the dialogfragment launcher to MainActivity.
+  - Moved gridlisteners and the connected actions to the PictureGridHandler class.
+  
+  ### Friday 26/01/18
+  - Firebase registration and login
+  - Uploading to the cloud when logged in is working
+  - Deleting pictures from your favorites causes them to be deleted from the cloud
+  - SnackBars had now a working undo function, so you can undo action that were made by mistake.
 
  
 
