@@ -36,8 +36,6 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_swipe_setup, container, false);
 
-        Button select = view.findViewById(R.id.select);
-        select.setOnClickListener(this);
         ImageView selectAlbum = view.findViewById(R.id.addAlbum);
         selectAlbum.setOnClickListener(this);
 
@@ -80,9 +78,6 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.select:
-                selectGalleryImage(view);
-                break;
             case R.id.addAlbum:
                 selectGalleryImage(view);
                 break;

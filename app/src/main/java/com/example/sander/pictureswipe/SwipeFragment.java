@@ -74,7 +74,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
 
             //Picasso.with(getContext()).load(pictureUri).into(imageView);
 
-            LoadImages loadImages = new LoadImages();
+            LoadImages loadImages = new LoadImages(getActivity());
             images = loadImages.getList(getContext(), pictureUri);
             System.out.println(images.size());
 
@@ -262,7 +262,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     }
 
     public void addToList(String path, String table) {
-        // Put in 'done' db.
+        // Put in 'done'/pictures db.
         addToPictures(path);
 
         // Add to bin db

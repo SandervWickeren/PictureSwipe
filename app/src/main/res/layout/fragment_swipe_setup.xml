@@ -32,13 +32,6 @@
             android:layout_gravity="center"
             android:text="Press the button to select an image and get started" />
 
-        <Button
-                android:id="@+id/select"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Select" />
-
-
     </android.support.v7.widget.CardView>
 
 

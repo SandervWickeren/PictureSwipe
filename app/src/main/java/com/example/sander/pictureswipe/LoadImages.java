@@ -2,6 +2,7 @@ package com.example.sander.pictureswipe;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.MediaStore;
 
@@ -14,6 +15,12 @@ import java.util.List;
  */
 
 public class LoadImages {
+
+    private Context mContext;
+
+    public LoadImages(Context context) {
+        this.mContext = context;
+    }
 
     public List<String> getList(Context context, Uri uri) {
         String initial_path = getRealPathFromUri(context, uri);
@@ -72,11 +79,15 @@ public class LoadImages {
         String[] allowedExtensions = new String[] {"jpg", "jpeg", "png"};
         File[] files = dir.listFiles();
 
-        // Convert to list of string containing only allowed files.
+        // Get database instance
+        SqliteDatabase db = SqliteDatabaseSingleton.getInstance(mContext.getApplicationContext());
+
+        // Convert to list of string containing only allowed file extensions and
+        // check if not already reviewed.
         List<String> imagePaths = new ArrayList<>();
         for (File img:files){
             for (String extension : allowedExtensions) {
-                if (img.getName().toLowerCase().endsWith(extension)) {
+                if (img.getName().toLowerCase().endsWith(extension) && !(db.inPictures(img.getName()))) {
                     imagePaths.add(img.toString());
                 }
             }
