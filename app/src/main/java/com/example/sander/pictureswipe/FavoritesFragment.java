@@ -168,55 +168,61 @@ public class FavoritesFragment extends Fragment {
     }
 
     public void removeFile(final String name) {
-        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
-        // Create a reference to the file to delete
-        StorageReference desertRef = mStorageRef.child(mAuth.getCurrentUser().getUid() + "/" + name);
+            StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        // Delete the file
-        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                // File deleted successfully
+            // Create a reference to the file to delete
+            StorageReference desertRef = mStorageRef.child(mAuth.getCurrentUser().getUid() + "/" + name);
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Uh-oh, an error occurred!
-            }
-        });
+            // Delete the file
+            desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    // File deleted successfully
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Uh-oh, an error occurred!
+                }
+            });
+        }
 
     }
 
     public void uploadFile(String name, String path) {
-        Uri file = Uri.fromFile(new File(path));
-        StorageReference riversRef = mStorageRef.child(mAuth.getCurrentUser().getUid() + "/" + name);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
-        riversRef.putFile(file)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        Toast.makeText(getActivity(), "Succesfully uploaded to the cloud", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        // ...
-                    }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                        System.out.println("Upload is " + progress + "% done");
-                    }
-                });
+            Uri file = Uri.fromFile(new File(path));
+            StorageReference riversRef = mStorageRef.child(mAuth.getCurrentUser().getUid() + "/" + name);
+
+            riversRef.putFile(file)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get a URL to the uploaded content
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            Toast.makeText(getActivity(), "Succesfully uploaded to the cloud", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            // ...
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            System.out.println("Upload is " + progress + "% done");
+                        }
+                    });
+        }
 
     }
 

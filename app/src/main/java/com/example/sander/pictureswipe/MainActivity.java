@@ -101,11 +101,6 @@ public class MainActivity extends AppCompatActivity {
         fragment.show(ft, "dialog");
     }
 
-   /* public void launchLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }*/
-
     public String logText() {
         if (mAuth.getCurrentUser() != null) {
             return "Logout";
@@ -173,18 +168,6 @@ public class MainActivity extends AppCompatActivity {
                         replaceFragment(swipeFragment);
                     }
 
-                    // Check if Swipefragment is active,
-                    // otherwise launch SwipeSetup.
-
-                } else if (id == R.id.navigation_account) {
-                    System.out.println(mAuth.getCurrentUser());
-                    if (mAuth.getCurrentUser() == null) {
-                        LoginFragment fragment = new LoginFragment();
-                        replaceFragment(fragment);
-                    } else {
-                        AccountFragment fragment = new AccountFragment();
-                        replaceFragment(fragment);
-                    }
                 } else if (id == R.id.navigation_bin) {
                     BinFragment fragment = new BinFragment();
                     replaceFragment(fragment);
@@ -219,10 +202,6 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.setSelectedItemId(R.id.navigation_favorites);
         } else if (Objects.equals(name, SwipeFragment.class.getName())) {
             bottomNavigationView.setSelectedItemId(R.id.navigation_swipe);
-
-            // All other fragments are from the profile page
-        } else {
-            bottomNavigationView.setSelectedItemId(R.id.navigation_account);
         }
 
         // Set the listener back

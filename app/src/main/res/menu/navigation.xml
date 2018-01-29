@@ -16,9 +16,4 @@
         android:icon="@drawable/ic_grade_black_24dp"
         android:title="@string/bnv_fav" />
 
-    <item
-        android:id="@+id/navigation_account"
-        android:icon="@drawable/ic_account_circle_black_24dp"
-        android:title="@string/bnv_acc" />
-
 </menu>
