@@ -24,6 +24,7 @@ import android.widget.GridView;
 public class BinFragment extends Fragment {
 
     PictureGridAdapter pictureGridAdapter;
+    PictureGridHandler pictureGridHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,12 +44,12 @@ public class BinFragment extends Fragment {
 
         GridView gridView = view.findViewById(R.id.binImageGrid);
 
-        PictureGridHandler pictureGridHandler = new PictureGridHandler(getActivity(), "bin",
+        pictureGridHandler = new PictureGridHandler(getActivity(), "bin",
                 BinFragment.class.getName());
 
         gridView.setOnItemClickListener(pictureGridHandler);
         gridView.setOnItemLongClickListener(pictureGridHandler);
-        PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("bin"));
+        pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("bin"));
         gridView.setAdapter(pictureGridAdapter);
 
     }

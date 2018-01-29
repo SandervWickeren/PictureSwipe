@@ -3,6 +3,7 @@ package com.example.sander.pictureswipe;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ public class PictureGridHandler implements GridView.OnItemClickListener, GridVie
     private View v;
     private String table;
     private String fragmentTag;
+    public Snackbar delete;
 
     public PictureGridHandler(Context context, String table, String fragmentTag) {
         this.mContext = context;
@@ -75,12 +77,12 @@ public class PictureGridHandler implements GridView.OnItemClickListener, GridVie
         ((MainActivity)mContext).reloadFragment(fragmentTag);
 
         // Create info string.
-        String info = "You removed " + name;
+        String info = "You removed " + name + "from your " + table;
 
         // Create information snackbar with undo option. When the user presses the undo
         // button, the image 'll be restored.
-        Snackbar delete = Snackbar
-                .make(v.findViewById(R.id.snackbarLocation), info,
+        delete = Snackbar
+                .make(v.findViewById(R.id.coordinatorLayout), info,
                         Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
@@ -89,8 +91,11 @@ public class PictureGridHandler implements GridView.OnItemClickListener, GridVie
                         // Undo has been clicked and the image 'll be restored
                         db.insertToList(table, id);
 
-                        // Reload the GridView.
-                        ((MainActivity)mContext).reloadFragment(fragmentTag);
+                        // Reload the GridView only if the user hasn't already gone to another
+                        // fragment.
+                        if (activeFragment(fragmentTag)) {
+                            ((MainActivity)mContext).reloadFragment(fragmentTag);
+                        }
 
                         // Notify user that it has been restored
                         Snackbar undo = Snackbar.make(v.findViewById(R.id.snackbarLocation),
@@ -112,5 +117,21 @@ public class PictureGridHandler implements GridView.OnItemClickListener, GridVie
 
         delete.show();
 
+    }
+
+    /**
+     * Function that checks whether the current fragment is active or not.
+     * @param tag of the fragment you want to check for.
+     * @return Either True or False depending on if its active or not.
+     */
+    private Boolean activeFragment(String tag) {
+        Fragment currentFragment = ((MainActivity) mContext)
+                .getSupportFragmentManager().findFragmentByTag(tag);
+
+        if (currentFragment != null && currentFragment.isVisible()) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
     }
 }
