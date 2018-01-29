@@ -1,6 +1,7 @@
 package com.example.sander.pictureswipe;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -98,6 +99,11 @@ public class MainActivity extends AppCompatActivity {
         fragment.setArguments(bundle);
         FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
         fragment.show(ft, "dialog");
+    }
+
+    public void launchLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
 

@@ -17,6 +17,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -57,6 +60,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_swipe, container, false);
+        setHasOptionsMenu(true);
 
         // Load images
         Bundle bundle = this.getArguments();
@@ -87,6 +91,25 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.actionbar_swipe, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logStatus:
+                ((MainActivity)getActivity()).launchLogin();
+                break;
+            case R.id.input:
+                SwipeSetupFragment fragment = new SwipeSetupFragment();
+                ((MainActivity)getActivity()).replaceFragment(fragment);
+        }
+        return true;
     }
 
     public void loadImages(Bundle bundle) {

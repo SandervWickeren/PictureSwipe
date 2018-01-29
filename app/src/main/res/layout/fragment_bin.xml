@@ -8,14 +8,6 @@
     android:background="@color/colorDarkBackground"
     tools:context="com.example.sander.pictureswipe.BinFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:layout_weight="16"
-        android:textColor="@color/colorLight"
-        android:text="Bin fragment" />
-
     <GridView
         android:id="@+id/binImageGrid"
         android:layout_width="match_parent"

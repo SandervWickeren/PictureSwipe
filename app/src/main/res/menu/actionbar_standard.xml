@@ -3,12 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/syncAll"
-        android:icon="@android:drawable/ic_popup_sync"
-        android:title="Sync All"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/logStatus"
         android:title="@string/login"
         app:showAsAction="never" />

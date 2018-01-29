@@ -86,14 +86,20 @@ public class FavoritesFragment extends Fragment {
         // Inflate custom actionbar when logged in.
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             inflater.inflate(R.menu.actionbar_favorites, menu);
+        } else {
+            inflater.inflate(R.menu.actionbar_standard, menu);
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.syncAll) {
-            syncWithCloud();
+        switch (item.getItemId()) {
+            case R.id.syncAll:
+                syncWithCloud();
+                break;
+            case R.id.logStatus:
+                ((MainActivity)getActivity()).launchLogin();
+                break;
         }
         return true;
     }

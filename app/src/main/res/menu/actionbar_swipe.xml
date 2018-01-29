@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/syncAll"
-        android:icon="@android:drawable/ic_popup_sync"
+        android:id="@+id/input"
+        android:icon="@drawable/ic_add_a_photo_black_24dp"
         android:title="Sync All"
         app:showAsAction="always" />
 

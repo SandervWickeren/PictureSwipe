@@ -9,6 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Environment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,6 +38,9 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_swipe_setup, container, false);
+
+        // Allows the fragment to use it's own actionbar.
+        setHasOptionsMenu(true);
 
         ImageView selectAlbum = view.findViewById(R.id.addAlbum);
         selectAlbum.setOnClickListener(this);
@@ -73,6 +79,22 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
             // other 'case' lines to check for other
             // permissions this app might request.
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.actionbar_standard, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logStatus:
+                ((MainActivity)getActivity()).launchLogin();
+                break;
+        }
+        return true;
     }
 
     @Override

@@ -1,12 +1,14 @@
 package com.example.sander.pictureswipe;
 
 
+import android.app.ActionBar;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -64,12 +66,17 @@ public class BinFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.deleteAll) {
-            deleteAllFromDevice();
+        switch (item.getItemId()) {
+            case R.id.deleteAll:
+                deleteAllFromDevice();
+                break;
+            case R.id.logStatus:
+                ((MainActivity)getActivity()).launchLogin();
+                break;
         }
         return true;
     }
+
 
     public void deleteAllFromDevice() {
 

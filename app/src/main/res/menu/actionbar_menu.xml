@@ -4,7 +4,12 @@
 
     <item
         android:id="@+id/deleteAll"
-        android:icon="@drawable/ic_delete_black_24dp"
+        android:icon="@drawable/ic_delete_forever_black_24dp"
         android:title="Delete All"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/logStatus"
+        android:title="@string/login"
+        app:showAsAction="never" />
 </menu>
