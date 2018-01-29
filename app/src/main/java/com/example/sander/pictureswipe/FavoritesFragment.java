@@ -80,6 +80,12 @@ public class FavoritesFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
@@ -92,13 +98,22 @@ public class FavoritesFragment extends Fragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        String title = ((MainActivity)getActivity()).logText();
+        menu.getItem(0).setTitle(title);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.syncAll:
                 syncWithCloud();
                 break;
             case R.id.logStatus:
-                ((MainActivity)getActivity()).launchLogin();
+                ((MainActivity)getActivity()).logAction();
+                onResume();
                 break;
         }
         return true;

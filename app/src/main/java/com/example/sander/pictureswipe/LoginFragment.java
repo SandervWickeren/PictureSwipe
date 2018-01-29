@@ -74,7 +74,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.register:
                 Fragment fragment = new RegisterFragment();
-                ((MainActivity)getActivity()).replaceFragment(fragment);
+                ((LoginActivity)getActivity()).replaceFragment(fragment);
                 break;
             case R.id.login:
                 loginCheck(email.getText().toString(), password.getText().toString());
@@ -104,12 +104,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                     "Succesfully logged in",
                                     Toast.LENGTH_SHORT).show();
 
-                            // Get current user
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-                            // Replace fragment
-                            AccountFragment fragment = new AccountFragment();
-                            ((MainActivity)getActivity()).replaceFragment(fragment);
+                            // Return to previous screen
+                            getActivity().finish();
 
 
                         } else {

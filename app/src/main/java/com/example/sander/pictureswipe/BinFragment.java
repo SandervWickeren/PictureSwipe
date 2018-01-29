@@ -2,6 +2,7 @@ package com.example.sander.pictureswipe;
 
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -54,6 +55,7 @@ public class BinFragment extends Fragment {
         pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("bin"));
         gridView.setAdapter(pictureGridAdapter);
 
+
     }
 
     @Override
@@ -65,13 +67,21 @@ public class BinFragment extends Fragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        String title = ((MainActivity)getActivity()).logText();
+        menu.getItem(0).setTitle(title);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.deleteAll:
                 deleteAllFromDevice();
                 break;
             case R.id.logStatus:
-                ((MainActivity)getActivity()).launchLogin();
+                ((MainActivity)getActivity()).logAction();
                 break;
         }
         return true;

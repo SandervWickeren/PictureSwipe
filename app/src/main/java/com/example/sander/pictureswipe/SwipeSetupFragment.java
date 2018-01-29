@@ -88,10 +88,18 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        String title = ((MainActivity)getActivity()).logText();
+        menu.getItem(0).setTitle(title);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logStatus:
-                ((MainActivity)getActivity()).launchLogin();
+                ((MainActivity)getActivity()).logAction();
                 break;
         }
         return true;

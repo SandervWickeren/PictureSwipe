@@ -101,9 +101,27 @@ public class MainActivity extends AppCompatActivity {
         fragment.show(ft, "dialog");
     }
 
-    public void launchLogin() {
+   /* public void launchLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+    }*/
+
+    public String logText() {
+        if (mAuth.getCurrentUser() != null) {
+            return "Logout";
+        } else {
+            return "Login";
+        }
+    }
+
+    public void logAction() {
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(MainActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
 
