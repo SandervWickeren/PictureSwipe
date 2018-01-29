@@ -11,33 +11,36 @@
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:ems="10"
-        android:inputType="textEmailAddress"
-        android:backgroundTint="@color/colorLight"
-        android:textColorHint="@color/colorLight"
-        android:textColor="@color/colorLight"
-        android:hint="Email" />
+        android:hint="Email"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/colorExtraDarkBackground"
+        android:textColor="@color/colorExtraDarkBackground"
+        android:inputType="textEmailAddress"/>
 
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:layout_marginBottom="10dp"
         android:hint="Password"
-        android:backgroundTint="@color/colorLight"
-        android:textColorHint="@color/colorLight"
-        android:textColor="@color/colorLight"
+        android:ems="10"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/colorExtraDarkBackground"
+        android:textColor="@color/colorExtraDarkBackground"
         android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/passwordRepeat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:hint="Password"
         android:ems="10"
-        android:hint="Repeat password"
-        android:backgroundTint="@color/colorLight"
-        android:textColorHint="@color/colorLight"
-        android:textColor="@color/colorLight"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/colorExtraDarkBackground"
+        android:textColor="@color/colorExtraDarkBackground"
         android:inputType="textPassword" />
 
     <LinearLayout

@@ -2,12 +2,19 @@
 <resources>
     <color name="colorPrimary">#3A9AD9</color>
     <color name="colorPrimaryDark">#212121</color>
-    <color name="colorAccent">#EB7260</color>
+    <color name="colorAccent">#3A9AD9</color>
 
     <color name="colorDarkBackground">#354458</color>
     <color name="colorBlueAccent">#3A9AD9</color>
     <color name="colorGreenAccept">#29ABA4</color>
     <color name="colorLight">#E9E0D6</color>
     <color name="colorRedDecline">#EB7260</color>
+    <color name="colorFavorite">#FEC601</color>
     <color name="colorExtraDarkBackground">#212121</color>
+
+    <color name="colorGeneralButtonShadow">#FF2C75A6</color>
+    <color name="colorFavoriteButtonShadow">#FFC29700</color>
+    <color name="colorRedDeclineButtonShadow">#FFB6584A</color>
+    <color name="colorGreenAcceptButtonShadow">#FF24948E</color>
+    <color name="colorTransparent">#00ffffff</color>
 </resources>

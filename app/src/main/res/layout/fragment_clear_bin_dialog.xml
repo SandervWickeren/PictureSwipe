@@ -31,7 +31,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/general_btn"
             android:backgroundTint="@color/colorGreenAccept"
+            android:foregroundTint="@color/colorTransparent"
             android:textColor="@color/colorLight"
             android:text="Cancel" />
 

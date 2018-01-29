@@ -9,8 +9,10 @@
 
     <TextView
         android:id="@+id/textView"
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/colorLight"
         android:text="Login" />
 
@@ -18,11 +20,12 @@
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:ems="10"
         android:hint="Email"
-        android:backgroundTint="@color/colorLight"
-        android:textColorHint="@color/colorLight"
-        android:textColor="@color/colorLight"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/colorExtraDarkBackground"
+        android:textColor="@color/colorExtraDarkBackground"
         android:inputType="textEmailAddress"
         />
 
@@ -30,11 +33,12 @@
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:hint="Password"
         android:ems="10"
-        android:backgroundTint="@color/colorLight"
-        android:textColorHint="@color/colorLight"
-        android:textColor="@color/colorLight"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/colorExtraDarkBackground"
+        android:textColor="@color/colorExtraDarkBackground"
         android:inputType="textPassword" />
 
     <LinearLayout
@@ -45,12 +49,18 @@
         <Button
             android:id="@+id/register"
             android:layout_width="wrap_content"
+            android:layout_marginEnd="5dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/general_light_btn"
+            android:textColor="@color/colorLight"
             android:layout_weight="1"
             android:text="Register" />
 
         <Button
             android:id="@+id/login"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/general_btn"
+            android:textColor="@color/colorLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

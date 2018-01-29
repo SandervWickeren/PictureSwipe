@@ -229,12 +229,8 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
                 convertView = getLayoutInflater().inflate(R.layout.card_layout, parent, false);
             }
 
-            TextView textViewCard = (TextView) convertView.findViewById(R.id.textViewCard);
-
             String[] splitPath = mData.get(position).split("/");
             String imageName = splitPath[splitPath.length - 1];
-            textViewCard.setText(imageName);
-
 
             ImageView imageView = convertView.findViewById(R.id.cardImage);
 
