@@ -25,12 +25,21 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 
 
@@ -41,7 +50,9 @@ import java.util.ArrayList;
 public class FavoritesFragment extends Fragment {
 
     private StorageReference mStorageRef;
+    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+    private String uid;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,9 +83,7 @@ public class FavoritesFragment extends Fragment {
         PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("favorites"));
         gridView.setAdapter(pictureGridAdapter);
 
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-        StorageReference imageReference = mStorageRef.child("favorites");
+        getReferences();
 
         test(db.selectAllPictures("pictures"));
     }
@@ -83,6 +92,14 @@ public class FavoritesFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getActivity().invalidateOptionsMenu();
+        getReferences();
+    }
+
+    public void getReferences() {
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        uid = mAuth.getCurrentUser().getUid();
     }
 
     @Override
@@ -120,27 +137,31 @@ public class FavoritesFragment extends Fragment {
     }
 
     public void syncWithCloud() {
+        if (mAuth.getCurrentUser() != null) {
 
-        // Get the database cursor
-        SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
-        Cursor cursor = db.selectAllBin("favorites");
+            // Get the database cursor
+            SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
+            Cursor cursor = db.selectAllBin("favorites");
 
-        // Check for every file if an upload is needed
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
+            // Check for every file if an upload is needed
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
 
-                // Retrieve the path
-                String path = cursor.getString(cursor.getColumnIndex("path"));
-                String name = cursor.getString(cursor.getColumnIndex("name"));
+                    // Retrieve the path
+                    String path = cursor.getString(cursor.getColumnIndex("path"));
+                    String name = cursor.getString(cursor.getColumnIndex("name"));
 
-                // Handle upload
-                inStorage(name, path);
+                    // Handle upload
+                    inStorage(name, path);
 
-                cursor.moveToNext();
+                    cursor.moveToNext();
+                }
             }
-        }
-        cursor.close();
+            cursor.close();
 
+            // Finally download items that are not available locally
+            downloadFiles();
+        }
 
     }
 
@@ -163,7 +184,65 @@ public class FavoritesFragment extends Fragment {
 
     }
 
-    public void downloadFile(String name, String path) {
+    public void downloadFiles() {
+
+        // Query the database for all the favorites
+        Query query = mDatabase.child(uid).child("images");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                // Stores the files that have to be downloaded
+                ArrayList<FirebaseImage> downloadList = new ArrayList<>();
+
+                // Loop trough every images
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    FirebaseImage firebaseImage = postSnapshot.getValue(FirebaseImage.class);
+
+                    final File img = new File(URI.create(firebaseImage.uri).getPath());
+
+                    if (img.exists()) {
+                        System.out.println(URI.create(firebaseImage.uri).getPath() + " exists");
+                    } else {
+                        System.out.println(firebaseImage.uri + " doesn't exists");
+
+                        // Get a file reference from FirebaseStorage.
+                        StorageReference fileRef = FirebaseStorage.getInstance().
+                                getReferenceFromUrl(firebaseImage.downloadUrl);
+
+                        // Start downloading the file
+                        fileRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                            @Override
+                            public void onSuccess(byte[] bytes) {
+                                // Create new file using the saved path
+                                try {
+                                    img.createNewFile();
+                                    FileOutputStream stream = new FileOutputStream(img.getPath());
+                                    stream.write(bytes);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    }
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 
     }
 
@@ -174,7 +253,7 @@ public class FavoritesFragment extends Fragment {
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
             // Create a reference to the file to delete
-            StorageReference desertRef = mStorageRef.child(mAuth.getCurrentUser().getUid() + "/" + name);
+            StorageReference desertRef = mStorageRef.child(uid + "/" + name);
 
             // Delete the file
             desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -196,8 +275,8 @@ public class FavoritesFragment extends Fragment {
     public void uploadFile(String name, String path) {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
-            Uri file = Uri.fromFile(new File(path));
-            StorageReference riversRef = mStorageRef.child(mAuth.getCurrentUser().getUid() + "/" + name);
+            final Uri file = Uri.fromFile(new File(path));
+            StorageReference riversRef = mStorageRef.child(uid  + "/" + name);
 
             riversRef.putFile(file)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -205,6 +284,7 @@ public class FavoritesFragment extends Fragment {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             // Get a URL to the uploaded content
                             Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            addUploadReference(file, downloadUrl.toString());
                             Toast.makeText(getActivity(), "Succesfully uploaded to the cloud", Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -225,6 +305,34 @@ public class FavoritesFragment extends Fragment {
         }
 
     }
+
+    public void addUploadReference(final Uri uri, final String downloadUrl) {
+
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                // Instance of FirebaseImage
+                FirebaseImage image = new FirebaseImage(uri, downloadUrl);
+
+                // Get a random valid key
+                String newKey = mDatabase.child(uid).child("images").push().getKey();
+
+                // Push values to Firebase
+                mDatabase.child(uid).child("images").child(newKey).setValue(image);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void deleteUploadReference(Uri uri) {
+
+    }
+
 
     public void test(Cursor cursor) {
         if (cursor.moveToFirst()) {
