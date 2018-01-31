@@ -109,7 +109,8 @@ public class PictureGridHandler implements GridView.OnItemClickListener, GridVie
                     public void onDismissed(Snackbar snackbar, int event) {
                         // If the user hasn't pressed 'UNDO' and the SnackBar is timed out
                         // remove the picture from FireBase (to minimize bandwidth).
-                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT ||
+                                event == Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE) {
 
                             FirebaseHelper firebaseHelper = new FirebaseHelper();
                             firebaseHelper.FirebaseHelper(mContext);

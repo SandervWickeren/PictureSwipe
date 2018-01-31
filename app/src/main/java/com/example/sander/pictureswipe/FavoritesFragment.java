@@ -161,6 +161,7 @@ public class FavoritesFragment extends Fragment {
 
             // Finally download items that are not available locally
             firebaseHelper.inLocalStorage();
+            firebaseHelper.launchMessage("Done syncing");
         }
     }
 }

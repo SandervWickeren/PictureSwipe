@@ -89,7 +89,7 @@ public class FirebaseHelper {
                         // Get a URL to the uploaded content
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         addUploadReference(file, downloadUrl.toString());
-                        Toast.makeText(context, "Succesfully uploaded to the cloud", Toast.LENGTH_SHORT).show();
+                        launchMessage("Syncing..");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -105,7 +105,6 @@ public class FirebaseHelper {
                         System.out.println("Upload is " + progress + "% done");
                     }
                 });
-        launchMessage("Done with uploading");
     }
 
 
@@ -143,7 +142,6 @@ public class FirebaseHelper {
 
             }
         });
-        launchMessage("Done syncing");
     }
 
 
@@ -179,6 +177,8 @@ public class FirebaseHelper {
                     // Refresh
                     ((MainActivity)context).reloadFragment(FavoritesFragment.class.getName());
 
+                    launchMessage("Syncing..");
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -189,7 +189,6 @@ public class FirebaseHelper {
 
             }
         });
-        launchMessage("Done with downloading");
     }
 
 

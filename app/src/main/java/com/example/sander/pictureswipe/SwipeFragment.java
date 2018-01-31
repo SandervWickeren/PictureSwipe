@@ -158,13 +158,22 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
                 mSwipeStack.swipeTopViewToLeft();
                 break;
             case R.id.addFavorite:
-                String swipedElement = swipeStackAdapter.getItem(mSwipeStack.getCurrentPosition());
-                dbHelper.addToList(swipedElement, "favorites");
-                mSwipeStack.swipeTopViewToRight();
+                addToFavorites();
                 break;
             case R.id.next:
                 mSwipeStack.swipeTopViewToRight();
                 break;
+        }
+    }
+
+    public void addToFavorites() {
+        if (!(mSwipeStack.getCurrentPosition() > swipeStackAdapter.getCount() - 1)) {
+            String swipedElement = swipeStackAdapter.getItem(mSwipeStack.getCurrentPosition());
+            dbHelper.addToList(swipedElement, "favorites");
+            System.out.println("Before Right: " + mSwipeStack.getCurrentPosition());
+            mSwipeStack.swipeTopViewToRight();
+        } else {
+            swipeStackListener.onStackEmpty();
         }
     }
 
@@ -175,7 +184,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         public void onViewSwipedToLeft(int position) {
             String swipedElement = swipeStackAdapter.getItem(position);
             Log.d("INFO", "onViewSwipedToLeft:" + swipedElement);
-            System.out.println("Left");
+            System.out.println("Left:");
 
             // Add image to SQlite bin table.
             dbHelper.addToList(swipedElement, "bin");
@@ -190,7 +199,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         public void onViewSwipedToRight(int position) {
             String swipedElement = swipeStackAdapter.getItem(position);
             Log.d("INFO", "onViewSwipedToRight:" + swipedElement);
-            System.out.println("Right");
+            System.out.println("Right: " + position);
 
             // Add image to database.
             dbHelper.addToPictures(swipedElement);
