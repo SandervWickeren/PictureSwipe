@@ -18,9 +18,9 @@ import java.io.File;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FullscreenImageFragment extends DialogFragment {
+public class FullscreenImageFragment extends DialogFragment implements View.OnClickListener{
 
-    ImageView imageFullscreen;
+    ImageView imageFullscreen, close;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +29,10 @@ public class FullscreenImageFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_fullscreen_image, container, false);
 
         imageFullscreen = view.findViewById(R.id.imageFullscreen);
+        close = view.findViewById(R.id.close);
+        close.setOnClickListener(this);
+
+
         Bundle bundle = this.getArguments();
         String path = bundle.getString("path");
         File image = new File(path);
@@ -42,4 +46,12 @@ public class FullscreenImageFragment extends DialogFragment {
         return view;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.close:
+                getDialog().dismiss();
+                break;
+        }
+    }
 }

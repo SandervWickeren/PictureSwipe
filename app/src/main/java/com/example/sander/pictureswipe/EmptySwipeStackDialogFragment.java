@@ -42,7 +42,7 @@ public class EmptySwipeStackDialogFragment extends DialogFragment implements Vie
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cancel:
-                getDialog().cancel();
+                getDialog().dismiss();
                 break;
             case R.id.yes:
                 clearAlbumFromPictures();

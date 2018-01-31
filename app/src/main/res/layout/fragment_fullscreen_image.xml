@@ -1,17 +1,23 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:backgroundTint="@color/colorExtraDarkBackground"
     tools:context="com.example.sander.pictureswipe.FullscreenImageFragment">
 
 
     <ImageView
         android:id="@+id/imageFullscreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:src="@drawable/higlight_color" />
-</LinearLayout>
+        android:src="@drawable/higlight_color"/>
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="top|end"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
+</FrameLayout>
