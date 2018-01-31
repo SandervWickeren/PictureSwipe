@@ -10,7 +10,9 @@ public class FirebaseImage {
     public String uri;
     public String downloadUrl;
 
-    public FirebaseImage() {}
+    public FirebaseImage() {
+        // Empty constructor necessary for Firebase.
+    }
 
     public FirebaseImage(Uri uri, String downloadUrl) {
         this.uri = uri.toString();
