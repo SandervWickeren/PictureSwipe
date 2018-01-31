@@ -78,7 +78,7 @@ public class PictureGridHandler implements GridView.OnItemClickListener, GridVie
         ((MainActivity)mContext).reloadFragment(fragmentTag);
 
         // Create info string.
-        String info = "You removed " + name + "from your " + table;
+        String info = "Removed the image from your " + table;
 
         // Create information snackbar with undo option. When the user presses the undo
         // button, the image 'll be restored.

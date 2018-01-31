@@ -1,0 +1,9 @@
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/general_button_shadow"/>
+    <item
+        android:drawable="@drawable/general_button_background"
+        android:bottom="5dp" />
+
+</layer-list>

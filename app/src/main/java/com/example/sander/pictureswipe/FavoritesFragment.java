@@ -136,6 +136,8 @@ public class FavoritesFragment extends Fragment {
             FirebaseHelper firebaseHelper = new FirebaseHelper();
             firebaseHelper.FirebaseHelper(getActivity());
 
+            firebaseHelper.launchMessage("Started syncing");
+
             // Get the database cursor
             SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
             Cursor cursor = db.selectAllBin("favorites");

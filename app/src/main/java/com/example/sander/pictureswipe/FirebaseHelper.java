@@ -5,7 +5,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -103,6 +105,7 @@ public class FirebaseHelper {
                         System.out.println("Upload is " + progress + "% done");
                     }
                 });
+        launchMessage("Done with uploading");
     }
 
 
@@ -140,6 +143,7 @@ public class FirebaseHelper {
 
             }
         });
+        launchMessage("Done syncing");
     }
 
 
@@ -185,6 +189,7 @@ public class FirebaseHelper {
 
             }
         });
+        launchMessage("Done with downloading");
     }
 
 
@@ -263,8 +268,11 @@ public class FirebaseHelper {
     }
 
 
-    public void launchError(String error) {
-        Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+    public void launchMessage(String message) {
+        View v = ((MainActivity)context).getWindow().getDecorView();
+        Snackbar undo = Snackbar.make(v.findViewById(R.id.snackbarLocation), message,
+                Snackbar.LENGTH_SHORT);
+        undo.show();
     }
 
 
