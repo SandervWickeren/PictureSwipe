@@ -98,5 +98,28 @@ determined by 1000 pixels width, and the correct aspect ratio for length.
 - Deleting pictures from your favorites causes them to be deleted from the cloud
 - SnackBars had now a working undo function, so you can undo action that were made by mistake.
 
+## Week 3
+
+### Monday 29/01/18
+- Every screen has now the correct ActionBar
+- Moved login to its own activity
+- Login and logout are now correctly handled in combination with the ActionBar
+- Fixed rare bug around undoing
+- Removed 'Account' from BottomNavigationView
+
+### Tuesday 30/01/18
+- Worked on button and edittext layouts
+- Backup function is now working:
+  - You can upload your favorites
+  - login on a new device and press the sync button causes to download all your saved favorites
+  - The uploaded images and their download links are now stored in a Firebase database.
+  - The application only downloads or uploads when it isn't on the location yet.
+- SqliteHelper class that contains helper functions for the database
+
+### Wednesday 31/01/18
+- Code that is used in combination with firebase has been moved to FirebaseHelper class.
+-
+-
+
  
 
