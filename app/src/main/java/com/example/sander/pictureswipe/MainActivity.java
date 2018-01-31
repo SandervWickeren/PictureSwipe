@@ -79,14 +79,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reloadFragment(String tag) {
-        // Get Fragment from manager
-        Fragment fragment = this.getSupportFragmentManager().findFragmentByTag(tag);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (fragment != null && fragment.isVisible()) {
 
-        // Reload the fragment
-        final FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
-        ft.detach(fragment);
-        ft.attach(fragment);
-        ft.commit();
+            // Reload the fragment
+            final FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+            ft.detach(fragment);
+            ft.attach(fragment);
+            ft.commit();
+        }
     }
 
     public void launchDialog(DialogFragment fragment, String path) {
