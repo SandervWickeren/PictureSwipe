@@ -118,6 +118,11 @@ public class SqliteDatabase extends SQLiteOpenHelper {
                 " NOT IN (SELECT pictures_id FROM favorites));");*/
     }
 
+    public void deleteFromPictures(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM pictures WHERE id='" + id + "';");
+    }
+
 
     /**
      * @param name: Name of the file from which it

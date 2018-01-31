@@ -1,10 +1,13 @@
 package com.example.sander.pictureswipe;
 
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -41,6 +44,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 /**
@@ -99,7 +103,9 @@ public class FavoritesFragment extends Fragment {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        uid = mAuth.getCurrentUser().getUid();
+        if (mAuth.getCurrentUser() != null) {
+            uid = mAuth.getCurrentUser().getUid();
+        }
     }
 
     @Override
@@ -136,6 +142,13 @@ public class FavoritesFragment extends Fragment {
         return true;
     }
 
+    public void refresh() {
+        Fragment fragment = getFragmentManager().findFragmentByTag(FavoritesFragment.class.getName());
+        if (fragment != null && fragment.isVisible()) {
+            ((MainActivity)getActivity()).reloadFragment(FavoritesFragment.class.getName());
+        }
+    }
+
     public void syncWithCloud() {
         if (mAuth.getCurrentUser() != null) {
 
@@ -161,12 +174,13 @@ public class FavoritesFragment extends Fragment {
 
             // Finally download items that are not available locally
             downloadFiles();
+
         }
 
     }
 
     public void inStorage(final String name, final String path) {
-        mStorageRef.child(mAuth.getCurrentUser().getUid() + "/" + name).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        mStorageRef.child(uid + "/" + name).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 // It's already in the cloud, so no upload needed.
@@ -203,6 +217,7 @@ public class FavoritesFragment extends Fragment {
 
                     if (img.exists()) {
                         System.out.println(URI.create(firebaseImage.uri).getPath() + " exists");
+
                     } else {
                         System.out.println(firebaseImage.uri + " doesn't exists");
 
@@ -216,9 +231,26 @@ public class FavoritesFragment extends Fragment {
                             public void onSuccess(byte[] bytes) {
                                 // Create new file using the saved path
                                 try {
+
+                                    // Download the file
                                     img.createNewFile();
+
                                     FileOutputStream stream = new FileOutputStream(img.getPath());
                                     stream.write(bytes);
+                                    System.out.println("Downloaded images to: " + img.getPath());
+
+                                    // Update the MediaScanner
+                                    ContentValues values = new ContentValues();
+                                    values.put(MediaStore.Images.Media.DATA, img.getAbsolutePath());
+                                    getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+                                    // Add to favorites
+                                    SqliteDatabaseHelper dbHelper = new SqliteDatabaseHelper(getActivity());
+                                    dbHelper.addToList(img.getAbsolutePath(), "favorites");
+
+                                    // Refresh
+                                    refresh();
+
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -244,23 +276,26 @@ public class FavoritesFragment extends Fragment {
 
 
 
+
+
     }
 
-    public void removeFile(final String name) {
+    public void removeFile(final String name, final String path) {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
             StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-            // Create a reference to the file to delete
-            StorageReference desertRef = mStorageRef.child(uid + "/" + name);
+            // Create a StorageReference to the file to delete
+            StorageReference desertRef = mStorageRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/" + name);
+
+            // Remove Image also from database
+            deleteUploadReference(path);
 
             // Delete the file
             desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    // File deleted successfully
-
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -329,7 +364,34 @@ public class FavoritesFragment extends Fragment {
         });
     }
 
-    public void deleteUploadReference(Uri uri) {
+    public void deleteUploadReference(String path) {
+
+        // Get uri
+        final Uri uri = Uri.fromFile(new File(path));
+
+        System.out.println(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        // Query the database for all the favorites
+        Query query = mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("images");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot keySnapshot : dataSnapshot.getChildren()) {
+
+                    System.out.println("Snapshot child: " + keySnapshot.child("uri").getValue());
+                    System.out.println("uri value: " + uri.toString());
+                    if (Objects.equals(keySnapshot.child("uri").getValue(), uri.toString())) {
+                        keySnapshot.getRef().removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 

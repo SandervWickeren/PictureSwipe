@@ -59,15 +59,16 @@ public class PictureGridHandler implements GridView.OnItemClickListener, GridVie
         // Retrieve name and id from the selected image.
         final String name = cursor.getString(cursor.getColumnIndex("name"));
         Integer id = cursor.getInt(cursor.getColumnIndex("id"));
+        String path = cursor.getString(cursor.getColumnIndex("path"));
         System.out.println(id);
 
         // Sent info to the SnackBarHandler
-        snackbarHandler(name, id, table);
+        snackbarHandler(name, id, table, path);
 
         return true;
     }
 
-    public void snackbarHandler(final String name, final Integer id, final String table) {
+    public void snackbarHandler(final String name, final Integer id, final String table, final String path) {
 
         // Remove item from table
         final SqliteDatabase db = SqliteDatabaseSingleton.getInstance(mContext.getApplicationContext());
@@ -110,7 +111,10 @@ public class PictureGridHandler implements GridView.OnItemClickListener, GridVie
                         // remove the picture from FireBase (to minimize bandwidth).
                         if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
                             FavoritesFragment fragment = new FavoritesFragment();
-                            fragment.removeFile(name);
+                            fragment.removeFile(name, path);
+
+                            // Finally remove also from picture database
+                            db.deleteFromPictures(id);
                         }
                     }
                 });

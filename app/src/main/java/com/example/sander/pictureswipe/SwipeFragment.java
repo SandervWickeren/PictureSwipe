@@ -50,6 +50,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     private SwipeStackAdapter swipeStackAdapter;
     private SwipeStackListener swipeStackListener;
     private SwipeProgressListener swipeProgressListener;
+    private SqliteDatabaseHelper dbHelper;
     Button bin, fav, next;
     RelativeLayout overlay;
     ImageView overlayIcon;
@@ -84,6 +85,9 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         mSwipeStack.setAdapter(swipeStackAdapter);
         mSwipeStack.setListener(swipeStackListener);
         mSwipeStack.setSwipeProgressListener(swipeProgressListener);
+
+        // Bind classes
+        dbHelper = new SqliteDatabaseHelper(getActivity());
 
         return view;
     }
@@ -148,7 +152,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.addFavorite:
                 String swipedElement = swipeStackAdapter.getItem(mSwipeStack.getCurrentPosition());
-                addToList(swipedElement, "favorites");
+                dbHelper.addToList(swipedElement, "favorites");
                 mSwipeStack.swipeTopViewToRight();
                 break;
             case R.id.next:
@@ -167,7 +171,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             System.out.println("Left");
 
             // Add image to SQlite bin table.
-            addToList(swipedElement, "bin");
+            dbHelper.addToList(swipedElement, "bin");
 
             // Reset overlay color
             overlay.setBackgroundColor(Color.parseColor("#00FFFFFF"));
@@ -182,7 +186,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             System.out.println("Right");
 
             // Add image to database.
-            addToPictures(swipedElement);
+            dbHelper.addToPictures(swipedElement);
 
             // Reset overlay color
             overlay.setBackgroundColor(Color.parseColor("#00FFFFFF"));
@@ -229,9 +233,6 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
                 convertView = getLayoutInflater().inflate(R.layout.card_layout, parent, false);
             }
 
-            String[] splitPath = mData.get(position).split("/");
-            String imageName = splitPath[splitPath.length - 1];
-
             ImageView imageView = convertView.findViewById(R.id.cardImage);
 
             File file = new File(mData.get(position));
@@ -266,7 +267,6 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     public void setIconOverlay(float progress) {
         String baseColorNext = "#29ABA4";
         String baseColorBin = "#EB7260";
-        double prog;
         float alpha;
 
         // Only start changing overlay color when the progress is more then
@@ -288,35 +288,4 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         overlayIcon.setAlpha(alpha);
 
     }
-
-    public void addToPictures(String path) {
-        SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
-
-        String[] slicedPath = path.split("/");
-        String name = slicedPath[slicedPath.length - 1];
-        String album = slicedPath[slicedPath.length - 2];
-
-        System.out.println(name + "::" + album);
-
-        System.out.println(db.inPictures(name));
-        if (!(db.inPictures(name))) {
-            db.insertPicture(name, album, path);
-        }
-    }
-
-    public void addToList(String path, String table) {
-        // Put in 'done'/pictures db.
-        addToPictures(path);
-
-        // Add to bin db
-        SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
-
-        String[] slicedPath = path.split("/");
-        String name = slicedPath[slicedPath.length - 1];
-
-        System.out.println(db.getIdFromName(name));
-
-        db.insertToList(table, db.getIdFromName(name));
-    }
-
 }
