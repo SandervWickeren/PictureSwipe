@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.w3c.dom.Text;
+
 import java.util.Objects;
 
 
@@ -32,6 +34,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
     EditText email, password, passwordRepeat;
     Button back, register;
+    TextView errorText;
     FirebaseAuth mAuth;
 
     @Override
@@ -46,6 +49,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         passwordRepeat = view.findViewById(R.id.passwordRepeat);
         back = view.findViewById(R.id.back);
         register = view.findViewById(R.id.register);
+        errorText = view.findViewById(R.id.errorText);
 
         back.setOnClickListener(this);
         register.setOnClickListener(this);
@@ -73,23 +77,28 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     public void registerCheck(String email, String pass, String passRepeat) {
         Integer noError = 1;
 
-        if (email.length() < 5) {
-            noError = 0;
-        }
-
         if (pass.length() < 6) {
             noError = 0;
+            errorText.setText("Your password is too short.");
         }
 
         if (!(Objects.equals(pass, passRepeat))) {
             noError = 0;
+            errorText.setText("The passwords don't match.");
+        }
+
+        if (email.length() < 5) {
+            noError = 0;
+            errorText.setText("Your email is not correct.");
         }
 
         // Only create user when there is no error.
         if (noError == 1) {
+            errorText.setVisibility(View.INVISIBLE);
             createUser(email, pass);
+        } else {
+            errorText.setVisibility(View.VISIBLE);
         }
-
     }
 
 

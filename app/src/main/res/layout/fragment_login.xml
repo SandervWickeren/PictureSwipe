@@ -33,13 +33,22 @@
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:hint="Password"
         android:ems="10"
         android:background="@drawable/edittext_background"
         android:textColorHint="@color/colorExtraDarkBackground"
         android:textColor="@color/colorExtraDarkBackground"
         android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/errorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible"
+        android:textColor="@color/colorRedDecline"
+        android:text="errorText" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,24 +75,4 @@
             android:layout_weight="1"
             android:text="Login" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/clearBin"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Clear bin" />
-
-    <Button
-        android:id="@+id/clearPictures"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Clear pictures" />
-
-    <Button
-        android:id="@+id/deepCleanPictures"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Deep clean" />
-
 </LinearLayout>

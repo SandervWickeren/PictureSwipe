@@ -71,7 +71,13 @@ public class BinFragment extends Fragment {
         super.onPrepareOptionsMenu(menu);
 
         String title = ((MainActivity)getActivity()).logText();
-        menu.getItem(0).setTitle(title);
+        menu.getItem(1).setTitle(title);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -82,6 +88,7 @@ public class BinFragment extends Fragment {
                 break;
             case R.id.logStatus:
                 ((MainActivity)getActivity()).logAction();
+                onResume();
                 break;
         }
         return true;

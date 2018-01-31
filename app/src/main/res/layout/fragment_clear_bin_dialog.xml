@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:text="Warning" />
+        android:text="Remove from device" />
 
     <TextView
         android:id="@+id/subtitle"
@@ -31,10 +31,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/general_btn"
-            android:backgroundTint="@color/colorGreenAccept"
-            android:foregroundTint="@color/colorTransparent"
-            android:textColor="@color/colorLight"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/general_light_btn"
             android:text="Cancel" />
 
         <Button
@@ -42,7 +40,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/colorRedDecline"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/decline_btns_square"
             android:textColor="@color/colorLight"
             android:text="Delete all" />
     </LinearLayout>

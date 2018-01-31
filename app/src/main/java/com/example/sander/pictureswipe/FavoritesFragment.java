@@ -110,7 +110,7 @@ public class FavoritesFragment extends Fragment {
         super.onPrepareOptionsMenu(menu);
 
         String title = ((MainActivity) getActivity()).logText();
-        menu.getItem(0).setTitle(title);
+        menu.getItem(1).setTitle(title);
     }
 
 

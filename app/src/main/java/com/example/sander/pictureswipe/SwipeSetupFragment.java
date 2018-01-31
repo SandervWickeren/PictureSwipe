@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
         // Allows the fragment to use it's own actionbar.
         setHasOptionsMenu(true);
 
-        ImageView selectAlbum = view.findViewById(R.id.addAlbum);
+        ImageButton selectAlbum = view.findViewById(R.id.addAlbum);
         selectAlbum.setOnClickListener(this);
 
         return view;
@@ -54,6 +55,12 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
 
         GrandPermissions grandPermissions = new GrandPermissions();
         grandPermissions.checkReadPermission(getActivity(), REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -90,9 +97,8 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-
         String title = ((MainActivity)getActivity()).logText();
-        menu.getItem(0).setTitle(title);
+        menu.getItem(1).setTitle(title);
     }
 
     @Override
@@ -100,6 +106,7 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
         switch (item.getItemId()) {
             case R.id.logStatus:
                 ((MainActivity)getActivity()).logAction();
+                onResume();
                 break;
         }
         return true;

@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
     EditText email, password;
+    TextView errorText;
     private FirebaseAuth mAuth;
 
     @Override
@@ -36,12 +37,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
-        Button cBin = v.findViewById(R.id.clearBin);
-        cBin.setOnClickListener(this);
-        Button cPictures = v.findViewById(R.id.clearPictures);
-        cPictures.setOnClickListener(this);
-        Button dDelete = v.findViewById(R.id.deepCleanPictures);
-        dDelete.setOnClickListener(this);
         Button register = v.findViewById(R.id.register);
         register.setOnClickListener(this);
         Button login = v.findViewById(R.id.login);
@@ -49,6 +44,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         email = v.findViewById(R.id.email);
         password = v.findViewById(R.id.password);
+        errorText = v.findViewById(R.id.errorText);
 
         // Get firebase reference
         mAuth = FirebaseAuth.getInstance();
@@ -58,20 +54,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
         switch (view.getId()) {
-            case R.id.clearBin:
-                db.deleteAllFromList();
-                Toast.makeText(getActivity(), "Succesfully cleared bin", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.clearPictures:
-                db.deleteAllPictures();
-                Toast.makeText(getActivity(), "Succesfully cleared pictures", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.deepCleanPictures:
-                db.deepDelete();
-                Toast.makeText(getActivity(), "Succesfully deep deleted", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.register:
                 Fragment fragment = new RegisterFragment();
                 ((LoginActivity)getActivity()).replaceFragment(fragment);
@@ -85,8 +68,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     public void loginCheck(String email, String pass) {
         if (email.length() == 0 || pass.length() == 0) {
-            // Report to user
+            errorText.setText("Email or password is incorrect.");
+            errorText.setVisibility(View.VISIBLE);
         } else {
+            errorText.setVisibility(View.INVISIBLE);
             logIn(getView(), email, pass);
         }
 
@@ -107,7 +92,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             // Return to previous screen
                             getActivity().finish();
 
-
                         } else {
                             // Check failure and give feedback
                             try {
@@ -115,15 +99,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                                 // Network problems
                             } catch (FirebaseNetworkException e) {
-                                Toast.makeText(getActivity(),
-                                        "Can't make a connection to the server.",
-                                        Toast.LENGTH_SHORT).show();
+                                errorText.setText("Can't make a connection to the server.");
+                                errorText.setVisibility(View.VISIBLE);
 
                                 // Other error
                             } catch (Exception e) {
-                                Toast.makeText(getActivity(),
-                                        "Please enter valid credentials.",
-                                        Toast.LENGTH_SHORT).show();
+                                errorText.setText("Email or password is incorrect.");
+                                errorText.setVisibility(View.VISIBLE);
                             }
                             // Log Error
                             Log.w("email", "signInWithEmail:failure", task.getException());

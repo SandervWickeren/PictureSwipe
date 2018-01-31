@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/logStatus"
-        android:title="@string/login"
-        app:showAsAction="never" />
+        android:id="@+id/input"
+        android:icon="@drawable/ic_add_a_photo_black_24dpw"
+        android:title="Sync All"
+        app:showAsAction="always" />
 
     <item
-        android:id="@+id/input"
-        android:icon="@drawable/ic_add_a_photo_black_24dp"
-        android:title="Sync All"
+        android:id="@+id/logStatus"
+        android:title="@string/login"
         app:showAsAction="always" />
 
 </menu>

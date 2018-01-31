@@ -35,13 +35,22 @@
         android:id="@+id/passwordRepeat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:hint="Password"
+        android:layout_marginBottom="5dp"
+        android:hint="Repeat password"
         android:ems="10"
         android:background="@drawable/edittext_background"
         android:textColorHint="@color/colorExtraDarkBackground"
         android:textColor="@color/colorExtraDarkBackground"
         android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/errorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible"
+        android:textColor="@color/colorRedDecline"
+        android:text="errorText" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,6 +62,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/general_light_btn"
+            android:textColor="@color/colorLight"
             android:text="back" />
 
         <Button
@@ -60,6 +72,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/general_btn"
+            android:textColor="@color/colorLight"
             android:text="Register" />
     </LinearLayout>
 

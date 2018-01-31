@@ -16,12 +16,13 @@
         select_album:cardCornerRadius="10dp"
         select_album:contentPadding="10dp">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/addAlbum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/add_btn"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:src="@drawable/ic_add_circle_black_24dp"
+            android:background="#00ffffff"
             android:alpha="0.8"/>
 
         <TextView
@@ -30,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
             android:layout_gravity="center"
-            android:text="Press the button to select an image and get started" />
+            android:text="Select an image to get started" />
 
     </android.support.v7.widget.CardView>
 

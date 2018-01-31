@@ -98,6 +98,12 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.actionbar_swipe, menu);
@@ -108,7 +114,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         super.onPrepareOptionsMenu(menu);
 
         String title = ((MainActivity)getActivity()).logText();
-        menu.getItem(0).setTitle(title);
+        menu.getItem(1).setTitle(title);
     }
 
     @Override
@@ -116,6 +122,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         switch (item.getItemId()) {
             case R.id.logStatus:
                 ((MainActivity)getActivity()).logAction();
+                onResume();
                 break;
             case R.id.input:
                 SwipeSetupFragment fragment = new SwipeSetupFragment();

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:text="Album" />
+        android:text="Finished album" />
 
     <TextView
         android:id="@+id/subTitle"
@@ -32,6 +32,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/general_light_btn"
             android:text="Cancel" />
 
         <Button
@@ -39,6 +41,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/accept_btn_square"
+            android:textColor="@color/colorLight"
             android:text="Yes" />
     </LinearLayout>
 </LinearLayout>

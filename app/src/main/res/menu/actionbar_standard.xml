@@ -3,7 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/filler"
+        android:title=""
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/logStatus"
         android:title="@string/login"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 </menu>
