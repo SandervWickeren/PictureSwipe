@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,8 +52,7 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
         super.onViewCreated(view, savedInstanceState);
 
         // Check if it has the permissions to read external storage.
-        GrandPermissions grandPermissions = new GrandPermissions();
-        grandPermissions.checkReadPermission(getActivity(), REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
+        askPermission();
     }
 
     @Override
@@ -61,24 +61,6 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
 
         // Reload ActionBar
         getActivity().invalidateOptionsMenu();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_PERMISSION_READ_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted
-                } else {
-                    // No permission, the app cannot be used so it 'll be closed.
-                    getActivity().finish();
-                }
-                return;
-            }
-        }
     }
 
     @Override
@@ -118,25 +100,58 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
 
 
     /**
+     * Function that checks if the user has accepted the permissions.
+     * @return true or false if the user accepted it.
+     */
+    public Boolean checkReadPermission() {
+        // Get permission value.
+        int readPermission = ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                android.Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        // Check if denied.
+        if (readPermission == PackageManager.PERMISSION_DENIED) {
+            return Boolean.FALSE;
+        } else {
+            return Boolean.TRUE;
+        }
+    }
+
+
+    /**
+     * Function that asks for read permission if necessary.
+     */
+    public void askPermission() {
+        // Ask permission if necessary using the GrandPermission class.
+        GrandPermissions grandPermissions = new GrandPermissions();
+        grandPermissions.checkReadPermission(getActivity(), REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
+    }
+
+
+    /**
      * This method 'll be invoked when the user clicks the 'add' button. The selected
      * picture 'll be processed in the MainActivity at 'onActivityResult'.
      * @param view current view.
      */
     public void selectGalleryImage(View view) {
+        // Only launch if permission.
+        if (checkReadPermission()) {
 
-        // Launch image gallery using an implicit intent.
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+            // Launch image gallery using an implicit intent.
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK);
 
-        // Get the filepath of the location of the images.
-        File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        String picturePath = pictureDirectory.getPath();
-        Uri data = Uri.parse(picturePath);
+            // Get the filepath of the location of the images.
+            File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            String picturePath = pictureDirectory.getPath();
+            Uri data = Uri.parse(picturePath);
 
-        // Set the correct image filetype.
-        galleryIntent.setDataAndType(data, "image/*");
+            // Set the correct image filetype.
+            galleryIntent.setDataAndType(data, "image/*");
 
-        // Use request code to trace back the result
-        startActivityForResult(galleryIntent, GALLERY_REQUEST);
+            // Use request code to trace back the result
+            startActivityForResult(galleryIntent, GALLERY_REQUEST);
+        } else {
+            askPermission();
+        }
     }
 
 
