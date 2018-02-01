@@ -1,6 +1,6 @@
 # Pickit
 
-The app Pickit focusses on the people that have many pictures, and struggle to find a convenient way to manage them.
+The app Pickit focuses on the people that have many pictures, and struggle to find a convenient way to manage them.
 It allows users to select one of their albums and select if they wanna keep, delete or favorite the pictures, using
 a intuitive swipe action. The option to sync favorites to the cloud, makes sure that the user 'll never lose their
 precious pictures. They can boot up a new device and sync their favorites without any hassle.
