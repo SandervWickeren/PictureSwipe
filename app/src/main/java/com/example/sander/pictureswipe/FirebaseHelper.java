@@ -139,7 +139,7 @@ public class FirebaseHelper {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                launchMessage("Error while downloading, please retry syncing.");
+                // No feedback for the user
             }
         });
     }
