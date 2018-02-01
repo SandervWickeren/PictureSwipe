@@ -6,7 +6,7 @@ a intuitive swipe action. The option to sync favorites to the cloud, makes sure 
 precious pictures. They can boot up a new device and sync their favorites without any hassle.
 
 #### Images
-![board1]()
+![board1](doc/screens.png)
 
 
 #### Solves a problem
