@@ -1,6 +1,6 @@
 # Report
 
-The app Pickit focusses on the people that have many pictures, and struggle to find a convenient way to manage them.
+The app Pickit focuses on the people that have many pictures, and struggle to find a convenient way to manage them.
 It allows users to select one of their albums and select if they wanna keep, delete or favorite the pictures, using
 a intuitive swipe action. The option to sync favorites to the cloud, makes sure that the user 'll never lose their
 precious pictures. They can boot up a new device and sync their favorites without any hassle.
@@ -14,25 +14,25 @@ precious pictures. They can boot up a new device and sync their favorites withou
 
 The application is build up from the idea of actvities and fragments. The MainActivity is de heart of the application
 and contains most of the inflated fragments. The navigation at the bottom and the icons at the actionbar guide you 
-trough the application. There are three screens presented and the user always start with the album selection fragment.
-When selecting the big + button, a intent 'll popup and let the user select an image from the album. After the selection
+trough the application. There are three screens presented, and the user always start with the album selection fragment.
+When selecting the big + button, an intent 'll popup and let the user select an image from the album. After the selection,
 the backend processes the parent folder and retrieves all the images from this folder. The selection fragment is transitioned
 into the fragment containing the SwipeStack (more below). At this point the user can start selecting his or her favorites 
-pictures or remove the ones he / she doesn't like. The following actions can be done afterwards:
+pictures, or remove the ones he / she doesn't like. The following actions can be done afterwards:
 - The 'deleted' pictures end up in the bin (Sqlite table), which can be reviewed by the user. They can be removed from the bin (not the device) by
 long clicking on the image. When the user presses on the Bin found in the ActionBar a popup 'll launch and asks the user if he / she
 really wants to remove all the pictures from the device.
-- The 'accepted' pictures end in a 'pictures' Sqlite table. In this table are all pictures stored that have been reviewd before.
-When the user has reviewed all pictures from a given album, he / she gets the possibility to review the album.
+- The 'accepted' pictures end in a 'pictures' Sqlite table. In this table are all pictures stored that have been reviewed before.
+When the user has reviewed all pictures from a given album, he / she gets the possibility to review the album again.
 - The 'favorites' pictures end up in an eponymous table and can be viewed just like the bin. When the user is logged in he / she
-can upload the favorites to Firebase and download them on another device.
+can upload the favorites to Firebase and download them to another device.
 
-In both favorites and bin the picture can be shown bigger by shortly pressing it.
+In both favorites and bin the pictures can be shown bigger by shortly pressing it.
 
 Classes:
 - BinFragment: contains the view of the bin.
 - FavoritesFragment: contains the view of the favorites.
-- ClearBinDialogFragment: producees a dialogfragment and when agreed removes the bin-pictures from the device.
+- ClearBinDialogFragment: produces a dialogfragment, and when agreed, removes the bin-pictures from the device.
 - FullscreenImageFragment: used to show images bigger.
 - GrandPermission: handles the correct permissions.
 - LoadImages: Used to load the pictures and convert URI to a path.
@@ -55,7 +55,7 @@ it does the following spread out over several functions:
     - Download the file.
     - Add the file to de Sqlite database locally.
    
-Removal is also handled. When the user longcliks in either Bin or Favorites, the item not only get removed from the favorites
+Removal is also handled. When the user longclicks in either Bin or Favorites, the item does not only get removed from the favorites
 locally, but also from the cloud:
 - Removing image from Firebase Storage
 - Removing reference to the image from Firebase Database
@@ -67,8 +67,8 @@ Classes:
 
 #### Picasso
 
-Picasso has an important part in the quick loading of all the pictures. It made it easier to handle
-then using the native image loaders.
+Picasso has an important role in the quick loading of all the pictures. It made it easier to show the images instead
+of the native image loaders.
 
 
 #### SwipeStack library
@@ -144,22 +144,23 @@ There where quite some challenges. To name a few:
 I had the idea that the storage feature of Firebase worked kinda the same like the database. But that seemed not the case, I 
 couldn't query Firebase storage and ask to list all the favorites for me. It took me back to the drawing board and I thought
 why not combine the use of both Storage and Database. So I could query the database, and use the retrieved links to download
-from the storage.
+from the storage. This was a good solution.
 
 #### Gallery not updating
 This was quite a tough one. I downloaded the images, and the debugger told me that all the images where on the device. But when
-I opened the gallery, the images where nowhere to be found. After some research I found that files are managed trough a
+I opened the gallery, the images were nowhere to be found. After some research I found that files are managed trough a
 'ContentResolver', that keeps track of all the files on the device. Someway I had to tell this resolver that it has to update
-itself and scan the files again. There was no easy .scanFiles(); or something like that. Apperently you have to remove and 
-add files to your device trough this 'ContentResolver' database, to make sure other apps 'll show the newly download files aswell.
+itself and scan the files again. There was no easy .scanFiles(); or something like that. Apperently you have to remove and
+add files from / to your device trough this 'ContentResolver' database, to make sure other apps 'll show the newly download 
+files aswell.
 
 #### Picture Skipping (SwipeStack library)
 This is one of those things, you can come across when using third party libraries that aren't updated in a while. The problem
 that occurs is that when you quickly swipe to the right or to the left, some images are gettings skipped. I looked trough
-my own code but couldn't find a solution to the problem. I thought, maybe there are some other persons who also used this 
-library and came across the same problem. So I started searching for forks, and more updated versions from the library and
-kept trying different versions. The research ended in nothing, and there are still problems that can only be fixed by updating
-the library code. I wanted to fix it on my own, but the lack of time made it impossible.
+my own code but couldn't find a solution to the problem. So it had to be the library itself.  I thought, maybe there are some 
+other persons who also used this library and came across the same problem. So I started searching for forks, 
+and more updated versions from the library and kept trying different versions. The research ended in nothing, and there are still
+problems that can only be fixed by updating the library code. I wanted to fix it on my own, but the lack of time made it impossible.
 
 #### Helper classes
 The classes where becoming bigger and bigger and the use of helper classes became inevitable. It took some time
@@ -176,7 +177,7 @@ As an example, I had the idea to have an account tab in the bottom navigation, b
 to remove that tab and add a single button in the ActionBar. The account tab hadn't any feautres beside logging in / out, so 
 why bother giving it its own tab?
 
-Another example that I should have thought of before instead of the last days, is to make the app a lot more userfriendlier. At
+Another example that I should have thought of before instead of the last days, is to make the app a lot more user-friendlier. At
 this point things work, but it misses some motivation for the user. Instead of selecting an album using the gallery, I want it to
 give it its own screen containing a list with albums, and behind that a percentage, so the user knows how far he/she is in the album.
 The same for the swipe element, when you show the user a progressbar, he or she 'll probably be much more motivated to finish the 
@@ -185,6 +186,6 @@ album, then when there is no progressbar.
 
 ## More time
 
-When I had more time, I would mainly focus on the usability aspect of the application. Things like progressbars, animations and
-better feedback to the users (example: colored snackbars with icons). And I would like mentioned before fix the annoying bug from
-the library, and make from favorites an upswipe options.
+When I would have more time, I would mainly focus on the usability aspect of the application. Things like progressbars, animations and
+better feedback to the users (example: colored snackbars with icons). And I would, like mentioned before, fix the annoying bug from
+the library. Another thing is that I would make from favorites an upswipe option instead of only a button.
