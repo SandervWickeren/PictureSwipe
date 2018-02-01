@@ -3,29 +3,25 @@ package com.example.sander.pictureswipe;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import java.io.File;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A DialogFragment that asks the user if he agrees to remove all the files that are currently
+ * in the SQlite 'bin' table, from the device.
  */
 public class ClearBinDialogFragment extends DialogFragment implements View.OnClickListener {
 
     private final int REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 2;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,6 +29,7 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_clear_bin_dialog, container, false);
 
+        // Bind views and set listeners.
         Button accept = view.findViewById(R.id.accept);
         Button cancel = view.findViewById(R.id.cancel);
         accept.setOnClickListener(this);
@@ -40,6 +37,7 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
 
         return view;
     }
+
 
     @Override
     public void onClick(View view) {
@@ -54,12 +52,17 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
         }
     }
 
+
+    /**
+     * Function that removes every file from the SQlite 'bin' table. It asks permissions when
+     * necessary and notifies the user if it has been successful.
+     */
     public void clearBin() {
         // Handle write permission.
         GrandPermissions grandPermissions = new GrandPermissions();
         grandPermissions.checkWritePermission(getActivity(), REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
 
-        // Get an instance of the sqlite database
+        // Get an instance of the SQlite database
         SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
 
         // Get cursor containing images from the bin
@@ -72,8 +75,6 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 String path = cursor.getString(cursor.getColumnIndex("path"));
-
-                System.out.println("File: " + path);
 
                 // Transform each path into a file
                 File image = new File(path);
@@ -97,7 +98,5 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
         // Clear bin and reload BinFragment / Gallery.
         db.deleteAllFromList();
         ((MainActivity)getActivity()).reloadFragment(BinFragment.class.getName());
-
     }
-
 }

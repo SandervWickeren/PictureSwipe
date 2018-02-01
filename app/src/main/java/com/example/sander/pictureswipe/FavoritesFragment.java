@@ -1,55 +1,23 @@
 package com.example.sander.pictureswipe;
 
 
-import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Objects;
 
 
 /**
- * A simple {@link Fragment} subclass. Used to
- * show all favorites of the user in a ListView.
+ * Fragment that shows all the items from the SQlite 'favorites' table in a GridView.
  */
 public class FavoritesFragment extends Fragment {
 
@@ -68,26 +36,31 @@ public class FavoritesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Get database instance
         SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
 
+        // Bind view.
         GridView gridView = view.findViewById(R.id.favImageGrid);
 
-        // Initiate PictureGridHandler;
+        // Instance of the class containing all listeners.
         PictureGridHandler pictureGridHandler = new PictureGridHandler(getActivity(),
                 "favorites", FavoritesFragment.class.getName());
+
+        // Bind class to all clickListener types.
         gridView.setOnItemClickListener(pictureGridHandler);
         gridView.setOnItemLongClickListener(pictureGridHandler);
 
-        // Set adapter
+        // Bind adapter.
         PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("favorites"));
         gridView.setAdapter(pictureGridAdapter);
-
-
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
+
+        // Force ActionBar redrawing to show the correct 'login' / 'logout' title.
         getActivity().invalidateOptionsMenu();
     }
 
@@ -96,7 +69,7 @@ public class FavoritesFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        // Inflate custom actionbar when logged in.
+        // Inflate the correct ActionBar based on login status.
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             inflater.inflate(R.menu.actionbar_favorites, menu);
         } else {
@@ -109,6 +82,7 @@ public class FavoritesFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
+        // Find out if ActionBar text should be 'login' or 'logout'.
         String title = ((MainActivity) getActivity()).logText();
         menu.getItem(1).setTitle(title);
     }
@@ -129,10 +103,14 @@ public class FavoritesFragment extends Fragment {
     }
 
 
+    /**
+     * Function that handles the cloud syncing. It checks if the user is logged in and using
+     * the FirebaseHelper class it up- and downloads the correct images.
+     */
     public void syncWithCloud() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
-            // Get firebasehelper instance
+            // Get FirebaseHelper instance and give it the context.
             FirebaseHelper firebaseHelper = new FirebaseHelper();
             firebaseHelper.FirebaseHelper(getActivity());
 
