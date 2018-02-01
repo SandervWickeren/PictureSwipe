@@ -14,25 +14,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-
 import java.io.File;
-
 import static android.app.Activity.RESULT_OK;
 
+
 /**
- * A simple {@link Fragment} subclass. Used to setup the start
- * of the Swipe fragment, using the selected properties.
+ * Used to setup the start of the Swipe fragment, using the selected properties.
  */
 public class SwipeSetupFragment extends Fragment implements View.OnClickListener {
 
+    // Codes necessary for requests.
     public static final int GALLERY_REQUEST = 10;
     private final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 1;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +39,7 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
         // Allows the fragment to use it's own actionbar.
         setHasOptionsMenu(true);
 
+        // Bind view and listener
         ImageButton selectAlbum = view.findViewById(R.id.addAlbum);
         selectAlbum.setOnClickListener(this);
 
@@ -53,6 +50,7 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Check if it has the permissions to read external storage.
         GrandPermissions grandPermissions = new GrandPermissions();
         grandPermissions.checkReadPermission(getActivity(), REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
     }
@@ -60,6 +58,8 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+
+        // Reload ActionBar
         getActivity().invalidateOptionsMenu();
     }
 
@@ -71,20 +71,13 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
+                    // permission was granted
                 } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    // No permission, the app cannot be used so it 'll be closed.
+                    getActivity().finish();
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
         }
     }
 
@@ -97,6 +90,8 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
+
+        // Find out if ActionBar text should be 'login' or 'logout'.
         String title = ((MainActivity)getActivity()).logText();
         menu.getItem(1).setTitle(title);
     }
@@ -121,10 +116,11 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
         }
     }
 
+
     /**
-     * This method 'll be invoked when the user clicks the 'select' button. The selected
+     * This method 'll be invoked when the user clicks the 'add' button. The selected
      * picture 'll be processed in the MainActivity at 'onActivityResult'.
-     * @param view
+     * @param view current view.
      */
     public void selectGalleryImage(View view) {
 
@@ -141,15 +137,15 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
 
         // Use request code to trace back the result
         startActivityForResult(galleryIntent, GALLERY_REQUEST);
-
     }
+
 
     /**
      * This method handles the response from the gallery activity. It gets called
      * from the MainActivity and starts the SwipeFragment.
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode Code used to launch the gallery activity.
+     * @param resultCode Code that gives if it was successful or not.
+     * @param data Retrieved from the activity (the selected image).
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -167,7 +163,7 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
             ((MainActivity)getActivity()).replaceFragment(fragment);
 
         } else {
-            // TODO show error
+            Toast.makeText(getContext(), "Couldn't load the images", Toast.LENGTH_SHORT).show();
         }
 
     }

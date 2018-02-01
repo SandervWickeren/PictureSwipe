@@ -1,20 +1,12 @@
 package com.example.sander.pictureswipe;
 
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,22 +18,16 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.squareup.picasso.Picasso;
-
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-
 import link.fls.swipestack.SwipeStack;
 
 
-
-
 /**
- * A simple {@link Fragment} subclass.
+ * SwipeFragment is the heart of the application and it displays the cards that can be swiped
+ * to the bin / favorites or just accept. It contains all the functions to handle this.
  */
 public class SwipeFragment extends Fragment implements View.OnClickListener {
 
@@ -106,6 +92,8 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+
+        // Inflate ActionBar
         inflater.inflate(R.menu.actionbar_swipe, menu);
     }
 
@@ -113,6 +101,7 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
+        // Find out if ActionBar text should be 'login' or 'logout'.
         String title = ((MainActivity)getActivity()).logText();
         menu.getItem(1).setTitle(title);
     }
@@ -121,23 +110,30 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logStatus:
+                // Check if logged in.
                 ((MainActivity)getActivity()).logAction();
                 onResume();
                 break;
             case R.id.input:
+                // Back to the Album selection screen.
                 SwipeSetupFragment fragment = new SwipeSetupFragment();
                 ((MainActivity)getActivity()).replaceFragment(fragment);
         }
         return true;
     }
 
+
+    /**
+     * Function that loads the images into the images array using the LoadImages class.
+     * @param bundle containing the uri of the selected image.
+     */
     public void loadImages(Bundle bundle) {
         try {
             Uri pictureUri = bundle.getParcelable("uri");
 
+            // Load complete parent folder using the uri.
             LoadImages loadImages = new LoadImages(getActivity());
             images = loadImages.getList(getContext(), pictureUri);
-            System.out.println("Image in the list: " + images.size());
 
             // Notify user with dialog when the album is already gone trough
             if (images.size() == 0) {
@@ -151,40 +147,54 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.addBin:
+                // Simulate a left swipe.
                 mSwipeStack.swipeTopViewToLeft();
                 break;
             case R.id.addFavorite:
                 addToFavorites();
                 break;
             case R.id.next:
+                // Simulate a right swipe.
                 mSwipeStack.swipeTopViewToRight();
                 break;
         }
     }
 
+
+    /**
+     * Function that adds the current active image to the favorites when possible.
+     */
     public void addToFavorites() {
+        // Check if not pressed when there is no image shown.
         if (!(mSwipeStack.getCurrentPosition() > swipeStackAdapter.getCount() - 1)) {
+            // Get element
             String swipedElement = swipeStackAdapter.getItem(mSwipeStack.getCurrentPosition());
+
+            // Add it to favorites.
             dbHelper.addToList(swipedElement, "favorites");
-            System.out.println("Before Right: " + mSwipeStack.getCurrentPosition());
+
+            // Simulate rightswipe.
             mSwipeStack.swipeTopViewToRight();
         } else {
+            // if stack is empty launch the correct function handling the situation.
             swipeStackListener.onStackEmpty();
         }
     }
 
 
+    /**
+     * Class from the SwipeStack library that handles the swipes.
+     */
     public class SwipeStackListener implements SwipeStack.SwipeStackListener{
 
         @Override
         public void onViewSwipedToLeft(int position) {
             String swipedElement = swipeStackAdapter.getItem(position);
-            Log.d("INFO", "onViewSwipedToLeft:" + swipedElement);
-            System.out.println("Left:");
 
             // Add image to SQlite bin table.
             dbHelper.addToList(swipedElement, "bin");
@@ -192,16 +202,13 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
             // Reset overlay color
             overlay.setBackgroundColor(Color.parseColor("#00FFFFFF"));
             overlayIcon.setAlpha(0f);
-
         }
 
         @Override
         public void onViewSwipedToRight(int position) {
             String swipedElement = swipeStackAdapter.getItem(position);
-            Log.d("INFO", "onViewSwipedToRight:" + swipedElement);
-            System.out.println("Right: " + position);
 
-            // Add image to database.
+            // Add image to pictures table in the database.
             dbHelper.addToPictures(swipedElement);
 
             // Reset overlay color
@@ -220,6 +227,9 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    /**
+     * Class from the SwipeStack library that handles the showing of the correct images.
+     */
     public class SwipeStackAdapter extends BaseAdapter {
 
         private List<String> mData;
@@ -245,13 +255,19 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
+
+            // Get the cardlayout.
             if (convertView == null) {
                 convertView = getLayoutInflater().inflate(R.layout.card_layout, parent, false);
             }
 
+            // Bind view.
             ImageView imageView = convertView.findViewById(R.id.cardImage);
 
+            // Get the file at the current position
             File file = new File(mData.get(position));
+
+            // Try to load it in the card.
             try {
                 Picasso.with(getContext()).load(file).error(R.drawable.higlight_color).fit().centerInside().into(imageView);
             } catch (Exception e) {
@@ -261,6 +277,11 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
+    /**
+     * Class from the SwipeStack library that keeps track of the SwipeProgress. It's used to
+     * show an icon overlay, that shows if the user swipes it to the bin or not.
+     */
     public class SwipeProgressListener implements SwipeStack.SwipeProgressListener {
 
         @Override
@@ -275,12 +296,14 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         public void onSwipeEnd(int position) {}
     }
 
+
     /**
      * Used to calculate the correct alpha and color for the overlay when moving
      * the picture to either left or right.
      * @param progress A float that represents how far it's from the end of the screen
      */
     public void setIconOverlay(float progress) {
+        // Set the base colors.
         String baseColorNext = "#29ABA4";
         String baseColorBin = "#EB7260";
         float alpha;
@@ -290,9 +313,12 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         if (progress > 0.05) {
             overlayIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_check_black_24dp));
             overlayIcon.setColorFilter(Color.parseColor(baseColorNext));
+
+            // Exponential function so it doesn't block the image if you swipe it only a little bit.
             alpha = (float)(Math.pow(150, (progress - 0.05)) / 50);
 
         } else if (progress < -0.05) {
+            // Handle the left.
             overlayIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete_black_24dp));
             overlayIcon.setColorFilter(Color.parseColor(baseColorBin));
             alpha = (float)(Math.pow(150, (-1 * progress + 0.05)) / 50);
@@ -300,8 +326,6 @@ public class SwipeFragment extends Fragment implements View.OnClickListener {
         } else {
             alpha = 0;
         }
-
         overlayIcon.setAlpha(alpha);
-
     }
 }

@@ -5,7 +5,18 @@
     <string name="bnv_fav">Favorites</string>
     <string name="bnv_bin">Bin</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login">Login</string>
+    <string name="select_image">Select an image to get started</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="back">back</string>
+    <string name="register">Register</string>
+    <string name="finished_album">Finished album</string>
+    <string name="finished_album_warning">It appears that you\'ve already sorted this album completely. When pressing \'yes\' all images from this album \'ll show up again except your favorites. Do you want to go trough it again?</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="remove_from_device">Remove from device</string>
+    <string name="remove_from_device_warning">Are you sure you want to clear the bin and remove all these pictures from your device? There is NO way back.</string>
+    <string name="delete_all">Delete all</string>
 </resources>

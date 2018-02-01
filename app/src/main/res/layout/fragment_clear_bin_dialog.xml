@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:text="Remove from device" />
+        android:text="@string/remove_from_device" />
 
     <TextView
         android:id="@+id/subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:text="Are you sure you want to clear the bin and remove all these pictures from your device? There is NO way back." />
+        android:text="@string/remove_from_device_warning" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             android:layout_weight="1"
             android:layout_marginEnd="5dp"
             android:background="@drawable/general_light_btn"
-            android:text="Cancel" />
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/accept"
@@ -43,6 +43,6 @@
             android:layout_marginStart="5dp"
             android:background="@drawable/decline_btns_square"
             android:textColor="@color/colorLight"
-            android:text="Delete all" />
+            android:text="@string/delete_all" />
     </LinearLayout>
 </LinearLayout>

@@ -274,7 +274,7 @@ public class FirebaseHelper {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    launchMessage("Unable to remove the image from the cloud, please try again.");
+                    // No feedback
                 }
             });
     }

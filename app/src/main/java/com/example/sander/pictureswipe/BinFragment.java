@@ -53,7 +53,7 @@ public class BinFragment extends Fragment {
         gridView.setOnItemLongClickListener(pictureGridHandler);
 
         // Bind adapter.
-        pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("bin"));
+        pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllList("bin"));
         gridView.setAdapter(pictureGridAdapter);
     }
 

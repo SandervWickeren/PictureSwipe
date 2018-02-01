@@ -51,7 +51,8 @@ public class FavoritesFragment extends Fragment {
         gridView.setOnItemLongClickListener(pictureGridHandler);
 
         // Bind adapter.
-        PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(), db.selectAllBin("favorites"));
+        PictureGridAdapter pictureGridAdapter = new PictureGridAdapter(getContext(),
+                db.selectAllList("favorites"));
         gridView.setAdapter(pictureGridAdapter);
     }
 
@@ -118,7 +119,7 @@ public class FavoritesFragment extends Fragment {
 
             // Get the database cursor
             SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
-            Cursor cursor = db.selectAllBin("favorites");
+            Cursor cursor = db.selectAllList("favorites");
 
             // Check for every favorite if an upload is needed
             if (cursor.moveToFirst()) {

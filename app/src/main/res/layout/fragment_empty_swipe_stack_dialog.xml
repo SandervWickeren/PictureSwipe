@@ -13,14 +13,14 @@
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:text="Finished album" />
+        android:text="@string/finished_album" />
 
     <TextView
         android:id="@+id/subTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:text="It appears that you've already sorted this album completely. When pressing 'yes' all images from this album 'll show up again except your favorites. Do you want to go trough it again?" />
+        android:text="@string/finished_album_warning" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:layout_weight="1"
             android:layout_marginEnd="5dp"
             android:background="@drawable/general_light_btn"
-            android:text="Cancel" />
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/yes"
@@ -44,6 +44,6 @@
             android:layout_marginStart="5dp"
             android:background="@drawable/accept_btn_square"
             android:textColor="@color/colorLight"
-            android:text="Yes" />
+            android:text="@string/yes" />
     </LinearLayout>
 </LinearLayout>

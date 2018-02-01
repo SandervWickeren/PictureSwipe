@@ -71,8 +71,7 @@
             android:background="@drawable/decline_btn"
             android:drawableTop="@drawable/ic_delete_black_24dps"
             android:drawableTint="@color/colorDarkBackground"
-            android:layout_weight="1"
-            android:text="Bin" />
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/addFavorite"

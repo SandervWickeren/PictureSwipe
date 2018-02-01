@@ -66,7 +66,7 @@ public class ClearBinDialogFragment extends DialogFragment implements View.OnCli
         SqliteDatabase db = SqliteDatabaseSingleton.getInstance(getActivity().getApplicationContext());
 
         // Get cursor containing images from the bin
-        Cursor cursor = db.selectAllBin("bin");
+        Cursor cursor = db.selectAllList("bin");
 
         // Get picture count
         int pictureCount = cursor.getCount();

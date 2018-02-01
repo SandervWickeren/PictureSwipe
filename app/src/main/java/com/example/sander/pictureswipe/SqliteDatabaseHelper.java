@@ -2,10 +2,11 @@ package com.example.sander.pictureswipe;
 
 import android.content.Context;
 
-/**
- * Created by sander on 30-1-2018.
- */
 
+/**
+ * Class that contains helper functions that process the data before functions inside the
+ * SqliteDatabase are being called.
+ */
 public class SqliteDatabaseHelper {
 
     private Context mContext;
@@ -17,10 +18,13 @@ public class SqliteDatabaseHelper {
         this.db = SqliteDatabaseSingleton.getInstance(mContext.getApplicationContext());
     }
 
-    public void addToPictures(String path) {
 
+    /**
+     * Function that prepares and checks data before inserting it into the 'picture' table.
+     * @param path of the image you want to add.
+     */
+    public void addToPictures(String path) {
         // Get name and album from path.
-        String[] slicedPath = path.split("/");
         String name = getSlice(path, 1);
         String album = getSlice(path, 2);
 
@@ -30,8 +34,15 @@ public class SqliteDatabaseHelper {
         }
     }
 
-    public void addToList(String path, String table) {
 
+    /**
+     * Function that handles when an item should be added to either bin / favorites. It first calls
+     * addToPictures() to tell it has been reviewed. After that it calls that insertToList()
+     * function to add it to the defined table.
+     * @param path of the image you want to add.
+     * @param table where you want to place the image (favorites / bin).
+     */
+    public void addToList(String path, String table) {
         // Add it to the pictures database.
         addToPictures(path);
 
@@ -39,6 +50,7 @@ public class SqliteDatabaseHelper {
         String name = getSlice(path, 1);
         db.insertToList(table, db.getIdFromName(name));
     }
+
 
     /**
      * Help function to get the correct strings.
@@ -51,5 +63,4 @@ public class SqliteDatabaseHelper {
         String[] slicedPath = path.split("/");
         return slicedPath[slicedPath.length - slice];
     }
-
 }
