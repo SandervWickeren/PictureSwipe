@@ -153,8 +153,6 @@ public class SwipeSetupFragment extends Fragment implements View.OnClickListener
         if (resultCode == RESULT_OK) {
             Uri pictureUri = data.getData();
 
-            Toast.makeText(getActivity(), pictureUri.getPath(), Toast.LENGTH_SHORT).show();
-
             // Load new fragment
             Bundle bundle = new Bundle();
             bundle.putParcelable("uri", pictureUri);
