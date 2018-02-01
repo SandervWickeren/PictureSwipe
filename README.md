@@ -5,6 +5,9 @@ It allows users to select one of their albums and select if they wanna keep, del
 a intuitive swipe action. The option to sync favorites to the cloud, makes sure that the user 'll never lose their
 precious pictures. They can boot up a new device and sync their favorites without any hassle.
 
+[Youtube demo (dutch)](https://youtu.be/VNOddANsfgY)
+Minimum api: 24
+
 #### Images
 ![board1](doc/screens.png)
 
