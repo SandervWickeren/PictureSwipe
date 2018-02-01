@@ -4,7 +4,6 @@ package com.example.sander.pictureswipe;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 
 /**
- * A simple {@link Fragment} subclass. Used to login
- * at FireBase, so favorites can be saved online.
+ *  Used to handle the login at FireBase, so favorites can be saved online.
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
@@ -35,27 +31,29 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        Button register = v.findViewById(R.id.register);
+        // Bind views and set listeners.
+        Button register = view.findViewById(R.id.register);
         register.setOnClickListener(this);
-        Button login = v.findViewById(R.id.login);
+        Button login = view.findViewById(R.id.login);
         login.setOnClickListener(this);
-
-        email = v.findViewById(R.id.email);
-        password = v.findViewById(R.id.password);
-        errorText = v.findViewById(R.id.errorText);
+        email = view.findViewById(R.id.email);
+        password = view.findViewById(R.id.password);
+        errorText = view.findViewById(R.id.errorText);
 
         // Get firebase reference
         mAuth = FirebaseAuth.getInstance();
 
-        return v;
+        return view;
     }
+
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.register:
+                // Launch register fragment.
                 Fragment fragment = new RegisterFragment();
                 ((LoginActivity)getActivity()).replaceFragment(fragment);
                 break;
@@ -66,6 +64,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    /**
+     * Function that checks if the input is long enough to be valid. If not it makes an error
+     * text visible for the user. If it's valid it launches logIn.
+     * @param email from the login.
+     * @param pass password from the login.
+     */
     public void loginCheck(String email, String pass) {
         if (email.length() == 0 || pass.length() == 0) {
             errorText.setText("Email or password is incorrect.");
@@ -74,43 +78,44 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             errorText.setVisibility(View.INVISIBLE);
             logIn(getView(), email, pass);
         }
-
     }
 
+
+    /**
+     * Handles Firebase authorisation.
+     * @param view current view.
+     * @param email from the account.
+     * @param password from the account.
+     */
     public void logIn(View view, String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Sign in", "signInWithEmail:success");
-                            Toast.makeText(getActivity(),
-                                    "Succesfully logged in",
-                                    Toast.LENGTH_SHORT).show();
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Toast.makeText(getActivity(), "Succesfully logged in",
+                            Toast.LENGTH_SHORT).show();
 
-                            // Return to previous screen
-                            getActivity().finish();
+                    // Return to previous screen
+                    getActivity().finish();
+                } else {
+                    // Check failure and give feedback
+                    try {
+                        throw task.getException();
 
-                        } else {
-                            // Check failure and give feedback
-                            try {
-                                throw task.getException();
+                    } catch (FirebaseNetworkException e) {
+                        // Network error, update text.
+                        errorText.setText("Can't make a connection to the server.");
+                        errorText.setVisibility(View.VISIBLE);
 
-                                // Network problems
-                            } catch (FirebaseNetworkException e) {
-                                errorText.setText("Can't make a connection to the server.");
-                                errorText.setVisibility(View.VISIBLE);
-
-                                // Other error
-                            } catch (Exception e) {
-                                errorText.setText("Email or password is incorrect.");
-                                errorText.setVisibility(View.VISIBLE);
-                            }
-                            // Log Error
-                            Log.w("email", "signInWithEmail:failure", task.getException());
-                        }
+                    } catch (Exception e) {
+                        // Other error, update text.
+                        errorText.setText("Email or password is incorrect.");
+                        errorText.setVisibility(View.VISIBLE);
                     }
-                });
+                }
+            }
+        });
     }
 }

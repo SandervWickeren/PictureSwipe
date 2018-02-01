@@ -1,14 +1,17 @@
 package com.example.sander.pictureswipe;
 
-import android.app.ActionBar;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
+/**
+ * Activity that holds login and register fragments. Launched from MainActivity by pressing either
+ * login or logout.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     @Override
@@ -17,11 +20,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Set backstack listener
-        getSupportFragmentManager().addOnBackStackChangedListener(new backstackListener());
+        getSupportFragmentManager().addOnBackStackChangedListener(new BackstackListener());
 
+        // Launch login fragment
         Fragment fragment = new LoginFragment();
         replaceFragment(fragment);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -32,25 +37,31 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+
+    /**
+     * Function that is used to replace a fragment with another one.
+     * @param fragment the fragment that has to be upfront.
+     */
     public void replaceFragment(Fragment fragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.loginFragmentContainer, fragment, fragment.getClass().getName());
-        //ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
         ft.addToBackStack(null);
         ft.commit();
     }
 
-    private class backstackListener implements FragmentManager.OnBackStackChangedListener {
+
+    /**
+     * BackstackListener keeps track of the backpresses. When the backstack is empty, the activity
+     * should close.
+     */
+    private class BackstackListener implements FragmentManager.OnBackStackChangedListener {
         @Override
         public void onBackStackChanged() {
-            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.loginFragmentContainer);
-
-            // If backstack is empty it should close the app
+            // If backstack is empty it should close the activity
             int backstackCount = getSupportFragmentManager().getBackStackEntryCount();
             if (backstackCount == 0) {
                 LoginActivity.this.finish();
             }
-
         }
     }
 }

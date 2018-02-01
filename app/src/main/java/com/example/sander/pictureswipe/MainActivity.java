@@ -1,35 +1,25 @@
 package com.example.sander.pictureswipe;
 
-import android.Manifest;
-import android.app.ActionBar;
+
 import android.content.Intent;
-import android.net.Uri;
+
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseNetworkException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.Objects;
 
+/**
+ * Activity that holds all fragments except for login and register. It contains functions
+ * that are used by various fragments.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -42,46 +32,57 @@ public class MainActivity extends AppCompatActivity {
         // Set onClickListener for bottomNavigation.
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_swipe);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new navigationClicks());
+        bottomNavigationView.setOnNavigationItemSelectedListener(new NavigationClicks());
 
+        // Launch the SwipeSetupFragment first.
         SwipeSetupFragment fragment = new SwipeSetupFragment();
         replaceFragment(fragment);
         updateNavigation(fragment);
 
-        // Set backstack listener
-        getSupportFragmentManager().addOnBackStackChangedListener(new backstackListener());
+        // Set BackStack listener
+        getSupportFragmentManager().addOnBackStackChangedListener(new BackstackListener());
 
-        // Get firebase reference
+        // Get Firebase reference
         mAuth = FirebaseAuth.getInstance();
     }
 
+
     /**
-     * Launched everytime a fragment transition is necessary
-     * @param fragment
+     * Launched everytime a fragment transition is necessary. It handles this transaction.
+     * @param fragment fragment that has to be on top.
      */
     public void replaceFragment (Fragment fragment) {
+        // Get fragment name.
         String backStateName = fragment.getClass().getName();
         String fragmentTag = backStateName;
 
+        // Check if fragment is in the BackStack.
         FragmentManager manager = getSupportFragmentManager();
         boolean fragmentPopped = manager.popBackStackImmediate(backStateName, 0);
 
-        // If fragment not in backstack, create it.
+        // If fragment not in the BackStack, create it.
         if (!fragmentPopped && manager.findFragmentByTag(fragmentTag) == null) {
             FragmentTransaction ft = manager.beginTransaction();
             ft.replace(R.id.fragment_container, fragment, fragmentTag);
-            // ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
             ft.addToBackStack(backStateName);
             ft.commit();
         }
-
+        // Update the BottomNavigationView.
         updateNavigation(fragment);
     }
 
-    public void reloadFragment(String tag) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        if (fragment != null && fragment.isVisible()) {
 
+    /**
+     * Function that is used to reload a fragment. Often used if the fragment needs a forced
+     * redraw.
+     * @param tag of the fragment that needs to be reloaded.
+     */
+    public void reloadFragment(String tag) {
+        // Find fragment by tag.
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+
+        // Only if the fragment is currently active and visible.
+        if (fragment != null && fragment.isVisible()) {
             // Reload the fragment
             final FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
             ft.detach(fragment);
@@ -90,8 +91,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void launchDialog(DialogFragment fragment, String path) {
 
+    /**
+     * Used to launch DialogFragments
+     * @param fragment DialogFragment that has to be launched
+     * @param path that to be added as a bundle value.
+     */
+    public void launchDialog(DialogFragment fragment, String path) {
         // Set up the bundle containing the path.
         Bundle bundle = new Bundle();
         bundle.putString("path", path);
@@ -102,6 +108,12 @@ public class MainActivity extends AppCompatActivity {
         fragment.show(ft, "dialog");
     }
 
+
+    /**
+     * Function that checks if the user is logged in and returns the text accordingly. It is used
+     * for displaying the correct ButtonText in the ActionBar.
+     * @return the correct display string.
+     */
     public String logText() {
         if (mAuth.getCurrentUser() != null) {
             return "Logout";
@@ -110,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Handles the action when the user clicks on the login / logout button in the ActionBar.
+     */
     public void logAction() {
         if (mAuth.getCurrentUser() != null) {
             FirebaseAuth.getInstance().signOut();
@@ -122,24 +138,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * Used to catch data from the gallery. The process is launched
-     * from the SwipeSetupFragment.
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * Used to catch data from the gallery. The process is launched from the SwipeSetupFragment.
+     * Necessary to be able to process the data at fragment level.
+     * @param requestCode Code used to launch the gallery activity.
+     * @param resultCode Code that gives if it was successful or not.
+     * @param data Retrieved from the activity (the selected image).
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+
     /**
      * Class that handles the BottomNavigation clicks.
      */
-    private class navigationClicks implements BottomNavigationView.OnNavigationItemSelectedListener {
+    private class NavigationClicks implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
             // Get id
             int id = item.getItemId();
 
@@ -150,18 +166,23 @@ public class MainActivity extends AppCompatActivity {
             // Check if already selected
             if (!(Objects.equals(id, selected_id))) {
 
-                // Launch correct fragment
+                // Launch correct fragment based on the selected navigation item id.
                 if (id == R.id.navigation_favorites) {
                     FavoritesFragment fragment = new FavoritesFragment();
                     replaceFragment(fragment);
 
                 } else if (id == R.id.navigation_swipe) {
+
+                    // Get name from SwipeFragment.
                     SwipeFragment swipeFragment = new SwipeFragment();
                     String backStateName = swipeFragment.getClass().getName();
 
+                    // Check if the name is in the BackStack.
                     FragmentManager manager = getSupportFragmentManager();
                     boolean fragmentPopped = manager.popBackStackImmediate(backStateName, 0);
 
+                    // Launch either the setup fragment or the swipe fragment based on if the
+                    // Swipe fragment was already active.
                     if (!fragmentPopped) {
                         SwipeSetupFragment fragment = new SwipeSetupFragment();
                         replaceFragment(fragment);
@@ -179,10 +200,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Functions that makes sure that the current inflated fragment
      * represents the correct selection at the BottomNavigationView.
-     * @param fragment
+     * @param fragment the fragment that is now active.
      */
     private void updateNavigation (Fragment fragment) {
         // Get fragment class name
@@ -206,14 +228,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Set the listener back
-        bottomNavigationView.setOnNavigationItemSelectedListener(new navigationClicks());
+        bottomNavigationView.setOnNavigationItemSelectedListener(new NavigationClicks());
     }
+
 
     /**
      * Class that handles navigation to previous fragments. It updates the UI and closes
      * the application when there is no fragment left.
      */
-    private class backstackListener implements FragmentManager.OnBackStackChangedListener {
+    private class BackstackListener implements FragmentManager.OnBackStackChangedListener {
         @Override
         public void onBackStackChanged() {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
