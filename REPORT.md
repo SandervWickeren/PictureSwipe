@@ -168,12 +168,26 @@ out why I couldn't run 'getActivity()' or something similar. But when I found ou
 to a class variable, it was no longer a problem anymore.
 
 ## Decisions
+It is sometimes good to do it different than before. The solutions you think of at the beginning, aren't always the best
+solutions for making your app. When you're programming your application there is always something you haven't thought of,
+or something that is perhaps not so useful.
 
+As an example, I had the idea to have an account tab in the bottom navigation, but after some feedback, it seemed much better
+to remove that tab and add a single button in the ActionBar. The account tab hadn't any feautres beside logging in / out, so 
+why bother giving it its own tab?
 
+Another example that I should have thought of before instead of the last days, is to make the app a lot more userfriendlier. At
+this point things work, but it misses some motivation for the user. Instead of selecting an album using the gallery, I want it to
+give it its own screen containing a list with albums, and behind that a percentage, so the user knows how far he/she is in the album.
+The same for the swipe element, when you show the user a progressbar, he or she 'll probably be much more motivated to finish the 
+album, then when there is no progressbar.
 
 
 ## More time
 
+When I had more time, I would mainly focus on the usability aspect of the application. Things like progressbars, animations and
+better feedback to the users (example: colored snackbars with icons). And I would like mentioned before fix the annoying bug from
+the library, and make from favorites an upswipe options.
 
 
 &copy; Naam, Jaar
