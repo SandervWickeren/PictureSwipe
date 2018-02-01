@@ -138,16 +138,44 @@ Classes:
 
 ## Challenges
 
-#### Syncing with the cloud
+There where quite some challenges. To name a few:
 
-#### 
+#### Syncing with the cloud
+I had the idea that the storage feature of Firebase worked kinda the same like the database. But that seemed not the case, I 
+couldn't query Firebase storage and ask to list all the favorites for me. It took me back to the drawing board and I thought
+why not combine the use of both Storage and Database. So I could query the database, and use the retrieved links to download
+from the storage.
+
+#### Gallery not updating
+This was quite a tough one. I downloaded the images, and the debugger told me that all the images where on the device. But when
+I opened the gallery, the images where nowhere to be found. After some research I found that files are managed trough a
+'ContentResolver', that keeps track of all the files on the device. Someway I had to tell this resolver that it has to update
+itself and scan the files again. There was no easy .scanFiles(); or something like that. Apperently you have to remove and 
+add files to your device trough this 'ContentResolver' database, to make sure other apps 'll show the newly download files aswell.
+
+#### Picture Skipping (SwipeStack library)
+This is one of those things, you can come across when using third party libraries that aren't updated in a while. The problem
+that occurs is that when you quickly swipe to the right or to the left, some images are gettings skipped. I looked trough
+my own code but couldn't find a solution to the problem. I thought, maybe there are some other persons who also used this 
+library and came across the same problem. So I started searching for forks, and more updated versions from the library and
+kept trying different versions. The research ended in nothing, and there are still problems that can only be fixed by updating
+the library code. I wanted to fix it on my own, but the lack of time made it impossible.
+
+#### Helper classes
+The classes where becoming bigger and bigger and the use of helper classes became inevitable. It took some time
+to understand how this worked, and how I could take advantage of this. In the beginning I had a hard time finding 
+out why I couldn't run 'getActivity()' or something similar. But when I found out that you can assign the context 
+to a class variable, it was no longer a problem anymore.
 
 ## Decisions
+
+
+
 
 ## More time
 
 
 
-
+&copy; Naam, Jaar
 
 
