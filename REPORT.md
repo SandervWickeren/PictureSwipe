@@ -5,7 +5,7 @@ It allows users to select one of their albums and select if they wanna keep, del
 a intuitive swipe action. The option to sync favorites to the cloud, makes sure that the user 'll never lose their
 precious pictures. They can boot up a new device and sync their favorites without any hassle.
 
-PICTURE
+![board1](doc/single_screen.png)
 
 ## Technical Design
 
@@ -188,8 +188,3 @@ album, then when there is no progressbar.
 When I had more time, I would mainly focus on the usability aspect of the application. Things like progressbars, animations and
 better feedback to the users (example: colored snackbars with icons). And I would like mentioned before fix the annoying bug from
 the library, and make from favorites an upswipe options.
-
-
-&copy; Naam, Jaar
-
-
