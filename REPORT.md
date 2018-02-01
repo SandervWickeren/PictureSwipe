@@ -9,6 +9,7 @@ PICTURE
 
 ## Technical Design
 
+
 ### High level overview
 
 The application is build up from the idea of actvities and fragments. The MainActivity is de heart of the application
@@ -40,6 +41,7 @@ Classes:
 - SwipeFragment: contains the view of the swipeable cards.
 - SwipeSetupFragment: used to let the user select an album.
 
+
 #### Syncing with the cloud
 
 An import feature is syncing with the cloud. This process is handled in the FirebaseHelper class. In a few steps
@@ -62,11 +64,90 @@ Classes:
 - FirebaseImage: easy way to add an image reference to the Firebase database.
 - FirebaseHelper: contains all functions around syncing with the cloud.
 
-#### Loading images
+
+#### Picasso
+
+Picasso has an important part in the quick loading of all the pictures. It made it easier to handle
+then using the native image loaders.
 
 
 #### SwipeStack library
 
-#### Firebase 
+The SwipeStack library is made by another user, and it helped creating the core swiping element. It
+was not easily possible to give the adapters and listeners from this library its own class. And thus these
+classes can be found inside another class.
+
+Classes:
+- SwipeFragment: contains all function around swiping.
+
+#### Firebase
+
+Firebase is an important library in this application and it is used to make backups possible. Users can create
+an account and start uploading their pictures. Three Firebase features are used.
+
+Authorisation:
+This is needed to support the database and storage feature.
+
+Storage:
+Firebase storage creates for every user a bucket where he or she can deposit images. It has the following
+structure:
+User UID:
+- image1
+- image2
+- image..
+
+Database:
+The database is used to store favorites and downloadlinks to them. It has the following structure:
+
+User UID:
+- images:
+  - UID
+    - downloadUrl:
+    - Uri
+
+Classes:
+- FirebaseImage: easy way to add an image reference to the Firebase database.
+- FirebaseHelper: contains all functions around syncing with the cloud.
+- LoginActivity: acitivity that handles login and registration.
+- LoginFragment: fragment that handles login.
+- RegisterFragment: fragment that handles registration
 
 #### SQlite
+
+Sqlite is used to keep track of the images that have been reviewed before, and manage the bin and the favorites locally.
+It uses the following structure to save storage:
+
+Bin:
+Unique ID
+pictures_id
+
+Favorites:
+Unique ID
+pictures_id
+
+Pictures:
+Unique ID
+name
+album
+path
+
+Classes:
+- SqliteDatabase: the class that contains most of the functions that directly affect the database.
+- SqliteDatabaseHelper: helper functions that have to be executed before direct Sqlitefunctions can be executed.
+- SqliteDatabaseSingleton: used to get an instance from the database from every possible place.
+
+## Challenges
+
+#### Syncing with the cloud
+
+#### 
+
+## Decisions
+
+## More time
+
+
+
+
+
+
