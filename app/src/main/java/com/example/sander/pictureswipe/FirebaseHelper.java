@@ -147,7 +147,7 @@ public class FirebaseHelper {
 
     /**
      * Function that tries to download the given file to the local storage.
-     * @param img is a reference to the file
+     * @param img is a reference to the file.
      * @param firebaseImage instance of the FirebaseImage class.
      */
     public void downloadFiles(final File img, FirebaseImage firebaseImage) {
